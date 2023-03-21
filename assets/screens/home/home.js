@@ -1,22 +1,22 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
-import {COLORS} from '../../constants/colors';
+import {COLORS} from './assets/constants/colors';
 import { SvgXml } from 'react-native-svg';
 import {useFonts} from 'expo-font';
-import {ROUTES} from '../../constants/routes'
 const xml =`
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ffffff" fill-opacity="1" d="M0,224L80,186.7C160,149,320,75,480,80C640,85,800,171,960,192C1120,213,1280,171,1360,149.3L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
 `;
 
-const Login = (props) => {
-  const {navigation} = props;
+
+
+const Home = () => {
   
   let [fontsLoaded] = useFonts({
-    'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
-    'Momcake-Thin': require('../../fonts/Momcake-Thin.otf'),
-    'CL-Reg': require('../../fonts/CL-Reg.ttf'),
-    'CL-Bold': require('../../fonts/CL-Bold.ttf'),
-    'Antically': require('../../fonts/Antically.ttf'),
+    'Momcake-Bold': require('./assets/fonts/Momcake-Bold.otf'),
+    'Momcake-Thin': require('./assets/fonts/Momcake-Thin.otf'),
+    'CL-Reg': require('./assets/fonts/CL-Reg.ttf'),
+    'CL-Bold': require('./assets/fonts/CL-Bold.ttf'),
+    'Antically': require('./assets/fonts/Antically.ttf'),
   });
   if (!fontsLoaded) {
     return null;
@@ -27,29 +27,11 @@ const Login = (props) => {
       
       <View style={styles.box}>
         <View style={styles.picContainer}>
-        <Image style={styles.loginlogo} source={require('../../loginlogo.png')} />
+          
+        <Image style={styles.loginlogo} source={require('./assets/loginlogo.png')} />
+        
         </View>
-      </View>
-
-        <SvgXml style={styles.wavepng} xml={xml} width="100%" height="100%"/>
-      
-      <View style={styles.inputWrapper}>
-      <Text style={styles.text1}>WELCOME CHEF!</Text>
-     
-        <TextInput style={styles.input} placeholder='Username'/>
-        <TextInput style={styles.input} placeholder='Password'/>
-     
-
-      </View>
-      <TouchableOpacity style={styles.getStartedBtn}>
-        <Text style={styles.getStartedTxt}>LOGIN</Text>
-      </TouchableOpacity>
-
-      <View style={styles.bottomTextCont}>
-        <Text style={styles.getStartedTxt}>Don't have an account?</Text>
-        <TouchableOpacity onPress={() => navigation.navigate(ROUTES.SIGNUP)}>
-        <Text style={styles.registerTxt}>REGISTER</Text>
-        </TouchableOpacity>
+        
       </View>
     </View>
     )
@@ -64,7 +46,7 @@ const styles = StyleSheet.create({
   box: {
     backgroundColor: '#A1FFB1',
     width: 330,
-    height: 317,
+    height: 140,
     borderRadius: 20,
     marginTop: 50,
     display: 'flex',
@@ -77,12 +59,12 @@ const styles = StyleSheet.create({
     paddingTop: 20
   },
   loginlogo: {
-    width: 220,
-    height: 250,
+    width: 90,
+    height: 100,
   },
   wavepng: {
     position: 'absolute',
-    bottom: 40
+    bottom: 260
   },
   text1: {
     fontFamily: 'Momcake-Bold',
@@ -110,7 +92,7 @@ const styles = StyleSheet.create({
     marginTop: 40
   },
   getStartedBtn: {
-    marginTop: 20,
+    marginTop: 40,
     backgroundColor: COLORS.primary,
     padding: 18,
     paddingHorizontal: 100,
@@ -146,4 +128,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default Login;
+export default Home;
