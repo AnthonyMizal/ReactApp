@@ -10,15 +10,14 @@ import Recipe from '../../components/recipe';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Searchfilter from '../../components/searchfilter';
 import Categoryfilter from '../../components/categoryFilter';
+import YourRecipefilter from '../../components/yourrecipe';
 const xml =`
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ffffff" fill-opacity="1" d="M0,224L80,186.7C160,149,320,75,480,80C640,85,800,171,960,192C1120,213,1280,171,1360,149.3L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
 `;
 
-const pressHandler = (item) => {
-  return console.log(item)
-}
 
-const Home = ({navigation}) => {
+
+const ManageRecipe = () => {
   
   const categories = [
     {
@@ -106,8 +105,6 @@ const Home = ({navigation}) => {
       </View>
       <ScrollView>
         <View style={styles.body1}>
-        <Text style={styles.text1}>WELCOME CHEF!</Text>
-        <Text style={styles.text2}>What would you like to cook?</Text>
         <View style={styles.searchBar}>
         <Icon style={styles.searchIcon}
               name="search"
@@ -117,28 +114,13 @@ const Home = ({navigation}) => {
         </View>
         
         </View>
-        <View style={styles.categoryWrapper}>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          {/* <Category category="Breakfast"/>
-          <Category category="Lunch"/>
-          <Category category="Dinner"/>
-          <Category category="Dessert"/>
-          <Category category="Dessert"/> */}
-          {categories.map(e => (
-            <Categoryfilter data={categories} input={itemCategory} />
-          ))
-          
-          }
-          
-          </ScrollView>
-          
-        </View>
       
         <View style={styles.recipeWrapper}>
           <View style={styles.recipeTxtCont}>
-            <Text style={styles.recipeTxt}>RECIPES</Text>
+            <Text style={styles.recipeTxt}>Manage Your Recipe</Text>
           </View>
-          <Searchfilter data={recipelist} input={item} setInput={setRecipe} />
+          
+          <YourRecipefilter data={recipelist} input={item} setInput={setRecipe} onPress={() => handlePress()}/>
         </View>
         
       </ScrollView>
@@ -208,7 +190,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderColor: COLORS.green,
     paddingBottom: 10,
-    width: 80,
+    width: 195,
     marginVertical: 20,
     marginStart: 10
   },
@@ -219,4 +201,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default Home;
+export default ManageRecipe;

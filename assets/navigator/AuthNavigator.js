@@ -5,6 +5,7 @@ import Login from '../screens/auth/login'
 import Getstarted from '../screens/auth/getstarted'
 import Signup from '../screens/auth/signup'
 import {ROUTES} from '../constants/routes'
+import BottomTabNavigator from './BottomTabNavigator';
 
 const Stack = createStackNavigator();
 
@@ -19,6 +20,7 @@ const AuthNavigator = () => {
         <Stack.Screen name={ROUTES.GETSTARTED} component={Getstarted}/>
         <Stack.Screen name={ROUTES.LOGIN} component={Login}/>
         <Stack.Screen name={ROUTES.SIGNUP} component={Signup}/>
+        <Stack.Screen name={ROUTES.HOME_NAVIGATOR} component={BottomTabNavigator}/>
     </Stack.Navigator>
   );
 }

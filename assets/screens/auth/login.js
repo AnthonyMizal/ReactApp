@@ -30,7 +30,7 @@ const Login = (props) => {
         <Image style={styles.loginlogo} source={require('../../loginlogo.png')} />
         </View>
       </View>
-
+      
         <SvgXml style={styles.wavepng} xml={xml} width="100%" height="100%"/>
       
       <View style={styles.inputWrapper}>
@@ -41,7 +41,7 @@ const Login = (props) => {
      
 
       </View>
-      <TouchableOpacity style={styles.getStartedBtn}>
+      <TouchableOpacity style={styles.getStartedBtn} onPress={() => navigation.navigate(ROUTES.HOME)}>
         <Text style={styles.getStartedTxt}>LOGIN</Text>
       </TouchableOpacity>
 

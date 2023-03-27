@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
 import {COLORS} from '../../constants/colors';
 import { SvgXml } from 'react-native-svg';
 import {useFonts} from 'expo-font';
@@ -24,7 +24,8 @@ const Signup = (props) =>  {
   }
 
     return (
-    <View style={styles.container}>
+      <ScrollView vertical={true} showsVerticalScrollIndicator={false}>
+    <View style={styles.container} >
       
       <View style={styles.box}>
         <View style={styles.picContainer}>
@@ -57,7 +58,9 @@ const Signup = (props) =>  {
         <Text style={styles.registerTxt}>LOGIN</Text>
         </TouchableOpacity>
       </View>
-    </View>
+      
+     </View>
+    </ScrollView>
     )
 }
 
