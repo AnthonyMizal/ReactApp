@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView, ScrollView } from 'react-native';
 import {COLORS} from '../../constants/colors';
 import { SvgXml } from 'react-native-svg';
 import {useFonts} from 'expo-font';
@@ -24,7 +24,9 @@ const Login = (props) => {
 
     return (
     <View style={styles.container}>
-      
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        <KeyboardAvoidingView 
+                    style={styles.keyboardView}>
       <View style={styles.box}>
         <View style={styles.picContainer}>
         <Image style={styles.loginlogo} source={require('../../loginlogo.png')} />
@@ -32,7 +34,8 @@ const Login = (props) => {
       </View>
       
         <SvgXml style={styles.wavepng} xml={xml} width="100%" height="100%"/>
-      
+        
+
       <View style={styles.inputWrapper}>
       <Text style={styles.text1}>WELCOME CHEF!</Text>
      
@@ -51,6 +54,9 @@ const Login = (props) => {
         <Text style={styles.registerTxt}>REGISTER</Text>
         </TouchableOpacity>
       </View>
+
+      </KeyboardAvoidingView>
+      </ScrollView>
     </View>
     )
 }
@@ -70,11 +76,20 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center'
   },
+  scrollView: {
+    width: '100%',
+    height: 0
+  },
   picContainer: {
     width: '90%',
     height: '60%',
     alignItems: 'center',
     paddingTop: 20
+  },
+  keyboardView: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   loginlogo: {
     width: 220,
@@ -141,7 +156,8 @@ const styles = StyleSheet.create({
   registerTxt: {
     color: COLORS.green,
     fontFamily: 'Momcake-Bold',
-    fontSize: 20
+    fontSize: 20,
+    paddingBottom: 15
   }
 
 });

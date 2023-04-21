@@ -65,6 +65,19 @@ const Profile = ({navigation}) => {
             </View>
         </TouchableOpacity>
 
+        <TouchableOpacity style={styles.wholeCont} onPress={() => navigation.navigate(ROUTES.LOGIN)}>
+            <View style={styles.rightCont}>
+            <Icon
+              name= {'ios-log-out'}
+              size={28}
+              color={'#ff4a59'}
+            />
+            </View>
+            <View style={styles.leftCont}>
+              <Text style={styles.text3}>Logout</Text>
+            </View>
+        </TouchableOpacity>
+
         </View>
       </ScrollView>
     </View>
@@ -92,6 +105,11 @@ const styles = StyleSheet.create({
     fontFamily: 'CL-Bold',
     fontSize: 17,
     color: COLORS.green
+  },
+  text3: {
+    fontFamily: 'CL-Bold',
+    fontSize: 17,
+    color: '#ff4a59'
   },
   text2: {
     fontFamily: 'CL-Bold',
