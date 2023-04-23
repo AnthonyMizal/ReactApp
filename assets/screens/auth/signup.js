@@ -1,9 +1,13 @@
+import React, {useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView, Button } from 'react-native';
 import {COLORS} from '../../constants/colors';
 import { SvgXml } from 'react-native-svg';
 import {useFonts} from 'expo-font';
 import {ROUTES} from '../../constants/routes'
+import axios from 'axios';
+
+const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
 const xml =`
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ffffff" fill-opacity="1" d="M0,224L80,186.7C160,149,320,75,480,80C640,85,800,171,960,192C1120,213,1280,171,1360,149.3L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
 `;
@@ -11,6 +15,10 @@ const xml =`
 
 
 const Signup = (props) =>  {
+  const [fullname, setFullname] = useState("");
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const {navigation} = props;
   let [fontsLoaded] = useFonts({
     'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
@@ -22,6 +30,50 @@ const Signup = (props) =>  {
   if (!fontsLoaded) {
     return null;
   }
+
+
+  const onChangeNameHandler = (fullname) => {
+    setFullname(fullname);
+  };
+
+  const onChangeEmailHandler = (email) => {
+    setEmail(email);
+  };
+
+  const onChangeUsernameHandler = (username) => {
+    setUsername(username);
+  };
+
+  const onChangePasswordHandler = (password) => {
+    setPassword(password);
+  };
+
+  const onSubmitFormHandler = async (event) => {
+    if (!fullname.trim() || !email.trim() || !username.trim() || !password.trim()) {
+      alert("Name or Email is invalid");
+      return;
+    }
+    try {
+      const response = await axios.post(`${baseUrl}register`, {
+        fullname,
+        email,
+        username,
+        password
+      });
+      if (response.status === 200) {
+        alert(` You have succesfully created an account!`);
+        setFullname('');
+        setEmail('');
+        setUsername('');
+        setPassword('');
+        return navigation.navigate(ROUTES.LOGIN);
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
 
     return (
       <ScrollView vertical={true} showsVerticalScrollIndicator={false}>
@@ -41,14 +93,14 @@ const Signup = (props) =>  {
       
       <View style={styles.inputWrapper}>
       <Text style={styles.text1}>SIGN UP HERE CHEF!</Text>
-        <TextInput style={styles.input} placeholder='Fullname'/>
-        <TextInput style={styles.input} placeholder='Email'/>
-        <TextInput style={styles.input} placeholder='Username'/>
-        <TextInput style={styles.input} placeholder='Password'/>
+        <TextInput style={styles.input} placeholder='Fullname' value={fullname} onChangeText={onChangeNameHandler}/>
+        <TextInput style={styles.input} placeholder='Email' value={email} onChangeText={onChangeEmailHandler}/>
+        <TextInput style={styles.input} placeholder='Username' value={username} onChangeText={onChangeUsernameHandler}/>
+        <TextInput style={styles.input} placeholder='Password' value={password} onChangeText={onChangePasswordHandler}/>
      
 
       </View>
-      <TouchableOpacity style={styles.getStartedBtn}>
+      <TouchableOpacity style={styles.getStartedBtn} onPress={onSubmitFormHandler}>
         <Text style={styles.getStartedTxt}>SIGNUP</Text>
       </TouchableOpacity>
 

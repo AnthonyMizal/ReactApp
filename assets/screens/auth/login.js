@@ -1,14 +1,20 @@
+import React, {useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView, ScrollView } from 'react-native';
 import {COLORS} from '../../constants/colors';
 import { SvgXml } from 'react-native-svg';
 import {useFonts} from 'expo-font';
-import {ROUTES} from '../../constants/routes'
+import {ROUTES} from '../../constants/routes';
+import axios from 'axios';
+
+const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
 const xml =`
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ffffff" fill-opacity="1" d="M0,224L80,186.7C160,149,320,75,480,80C640,85,800,171,960,192C1120,213,1280,171,1360,149.3L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
 `;
 
 const Login = (props) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const {navigation} = props;
   
   let [fontsLoaded] = useFonts({
@@ -21,6 +27,51 @@ const Login = (props) => {
   if (!fontsLoaded) {
     return null;
   }
+
+  const onChangeUsernameHandler = (username) => {
+    setUsername(username);
+  };
+
+  const onChangePasswordHandler = (password) => {
+    setPassword(password);
+  };
+
+  // const onSubmitFormHandler = async (event) => {
+  //   axios.post('login', {
+  //     username: 'test123',
+  //     password: 'test123'
+  //   })
+  //   .then(function (response) {
+  //     alert(response);
+  //   })
+  //   .catch(function (error) {
+  //     alert(error);
+  //   });
+  // }
+
+  const onSubmitFormHandler = async (event) => {
+    if (!username.trim() || !password.trim()) {
+      alert("Name or Email is invalid");
+      return;
+    }
+    try {
+      const response = await axios.post(`${baseUrl}login`, {
+        username,
+        password
+      });
+      if (response.status === 200) {
+        alert(` You have succesfully logged in!`);
+        setUsername('');
+        setPassword('');
+        // return navigation.navigate(ROUTES.LOGIN);
+        return navigation.navigate(ROUTES.HOME_NAVIGATOR)
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
 
     return (
     <View style={styles.container}>
@@ -39,12 +90,19 @@ const Login = (props) => {
       <View style={styles.inputWrapper}>
       <Text style={styles.text1}>WELCOME CHEF!</Text>
      
-        <TextInput style={styles.input} placeholder='Username'/>
-        <TextInput style={styles.input} placeholder='Password'/>
+        <TextInput style={styles.input} placeholder='Username'
+        value={username}
+        onChangeText={onChangeUsernameHandler}
+        />
+        <TextInput style={styles.input} placeholder='Password'
+        secureTextEntry
+        value={password}
+        onChangeText={onChangePasswordHandler}
+        />
      
 
       </View>
-      <TouchableOpacity style={styles.getStartedBtn} onPress={() => navigation.navigate(ROUTES.HOME)}>
+      <TouchableOpacity style={styles.getStartedBtn} onPress={onSubmitFormHandler}>
         <Text style={styles.getStartedTxt}>LOGIN</Text>
       </TouchableOpacity>
 

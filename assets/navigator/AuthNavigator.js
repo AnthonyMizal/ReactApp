@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
 import Login from '../screens/auth/login'
 import Getstarted from '../screens/auth/getstarted'
 import Signup from '../screens/auth/signup'
 import {ROUTES} from '../constants/routes'
 import BottomTabNavigator from './BottomTabNavigator';
+import { createStackNavigator } from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
 

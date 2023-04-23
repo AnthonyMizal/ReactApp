@@ -5,10 +5,10 @@ import Home from '../screens/home/home';
 import Search from '../screens/home/search';
 import Addrecipe from '../screens/home/addrecipe';
 import Bookmark from '../screens/home/bookmark';
-import Profile from '../screens/home/profile';
 import {ROUTES} from '../constants/routes';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ProfileNavigator from './ProfileNavigator';
+
 
 const Tab = createBottomTabNavigator();
 
