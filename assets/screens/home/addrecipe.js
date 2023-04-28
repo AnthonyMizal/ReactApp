@@ -2,25 +2,29 @@ import React, {useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView,} from 'react-native';
 import {COLORS} from '../../constants/colors';
-import { SvgXml } from 'react-native-svg';
 import {useFonts} from 'expo-font';
 import {ROUTES} from '../../constants/routes';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SelectDropdown from 'react-native-select-dropdown';
 import { ScrollView } from 'react-native-gesture-handler';
-
+import axios from 'axios';
 import Recipe from '../../components/recipe';
 import UploadImage from '../../components/uploadImage';
+const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
 
-const xml =`
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ffffff" fill-opacity="1" d="M0,224L80,186.7C160,149,320,75,480,80C640,85,800,171,960,192C1120,213,1280,171,1360,149.3L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
-`;
 
-const difficulty = ["EASY", "MEDIUM", "HARD"];
-const category = ["BREAKFAST", "LUNCH", "DINNER", "DESSERT"];
+const difficulty_picker = ["EASY", "MEDIUM", "HARD"];
+const category_picker = ["BREAKFAST", "LUNCH", "DINNER", "DESSERT"];
 const Addrecipe = ({navigation}) => {
-  
+  const [img_location, setLocation] = useState("");
+  const [name, setName] = useState("");
+  const [video_link, setVidLink] = useState("");
+  const [cooking_time, setTime] = useState();
+  const [difficulty, setDifficulty] = useState();
+  const [category, setCategory] = useState();
+  const [ingredients, setIngredients] = useState();
+  const [directions, setDirections] = useState();
   let [fontsLoaded] = useFonts({
     'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
     'Momcake-Thin': require('../../fonts/Momcake-Thin.otf'),
@@ -31,8 +35,66 @@ const Addrecipe = ({navigation}) => {
   if (!fontsLoaded) {
     return null;
   }
+  
+  const onChangeimgHandler = (img_location) => {
+    setLocation(img_location);
+  };
 
+  const onChangeNameHandler = (name) => {
+    setName(name);
+  };
 
+  const onChangeLinklHandler = (video_link) => {
+    setVidLink(video_link);
+  };
+
+  const onChangeCookingtimeHandler = (cooking_time) => {
+    setTime(cooking_time);
+  };
+
+  // const onChangeDifficultyHandler = (difficulty) => {
+  //   setDifficulty(difficulty);
+  // };
+
+  // const onChangeCategoryHandler = (category) => {
+  //   setCategory(category);
+  // };
+
+  const onChangeIngredientsHandler = (ingredients) => {
+    setIngredients(ingredients);
+  };
+
+  const onChangeDirectionssHandler = (directions) => {
+    setDirections(directions);
+  };
+
+  const onSubmitFormHandler = async (event) => {
+    // if (!fullname.trim() || !email.trim() || !username.trim() || !password.trim()) {
+    //   alert("Name or Email is invalid");
+    //   return;
+    // }
+    try {
+      const response = await axios.post(`${baseUrl}createrecipe`, {
+        img_location,
+        name,
+        video_link,
+        cooking_time,
+        difficulty,
+        category,
+        ingredients,
+        directions
+      });
+      if (response.status === 200) {
+        alert(` You have succesfully created an account!`);
+
+        return navigation.navigate(ROUTES.HOME_NAVIGATOR);
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
 
     return (
     <View style={styles.container}>
@@ -47,7 +109,7 @@ const Addrecipe = ({navigation}) => {
           <View style={styles.iconCont}>
             <Image style={styles.icon} source={require('../../addrecipe.png')} />
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onSubmitFormHandler}>
             <Text style={styles.doneText}>SAVE</Text>
           </TouchableOpacity>
       </View>
@@ -68,23 +130,24 @@ const Addrecipe = ({navigation}) => {
         <UploadImage/>
         <View>
           <Text style={styles.textInput}>Name of recipe:</Text>
-          <TextInput  style={styles.input} placeholder='Type here the name of the recipe...'/>
+          <TextInput  style={styles.input} placeholder='Type here the name of the recipe...' value={name} onChangeText={onChangeNameHandler}/>
         </View>
         <View>
           <Text style={styles.textInput}>Video Link:</Text>
-          <TextInput  style={styles.input} placeholder='Paste the recipe video here...'/>
+          <TextInput  style={styles.input} placeholder='Paste the recipe video here...' value={video_link} onChangeText={onChangeLinklHandler}/>
         </View>
         <View>
           <Text style={styles.textInput}>Cooking Time:</Text>
-          <TextInput  style={styles.input} placeholder='Type here the cooking time...'/>
+          <TextInput  style={styles.input} placeholder='Type here the cooking time...' value={cooking_time} onChangeText={onChangeCookingtimeHandler}/>
         </View>
         <View>
           <Text style={styles.textInput}>Difficulty:</Text>
           <SelectDropdown
             
-              data={difficulty}
+              data={difficulty_picker}
               onSelect={(selectedItem, index) => {
                 console.log(selectedItem, index)
+                setDifficulty(selectedItem);
               }}
               buttonTextAfterSelection={(selectedItem, index) => {
                 // text represented after item is selected
@@ -107,9 +170,10 @@ const Addrecipe = ({navigation}) => {
           <Text style={styles.textInput}>Category:</Text>
           <SelectDropdown
             
-              data={category}
+              data={category_picker}
               onSelect={(selectedItem, index) => {
                 console.log(selectedItem, index)
+                setCategory(selectedItem);
               }}
               buttonTextAfterSelection={(selectedItem, index) => {
                 // text represented after item is selected
@@ -131,15 +195,15 @@ const Addrecipe = ({navigation}) => {
 
 
         <View>
-          <Text style={styles.textInput}>Ingridients:</Text>
+          <Text style={styles.textInput}>Ingredients:</Text>
           <TextInput  style={styles.inputBig} multiline={true} numberOfLines={6}
- placeholder='Type here the ingridients...'/>
+ placeholder='Type here the ingridients...' value={ingredients} onChangeText={onChangeIngredientsHandler}/>
         </View>
 
         <View>
           <Text style={styles.textInput}>Directions:</Text>
           <TextInput  style={styles.inputBig} multiline={true} numberOfLines={6}
- placeholder='Type here the directions...'/>
+ placeholder='Type here the directions...' value={directions} onChangeText={onChangeDirectionssHandler}/>
         </View>
         
 

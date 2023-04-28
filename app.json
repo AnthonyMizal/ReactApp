@@ -18,13 +18,19 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "anthonymizal.pcookapp",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "39737ee7-84ef-423e-8076-b5cd0a0fd931"
+      }
     }
   }
 }

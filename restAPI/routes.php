@@ -39,6 +39,10 @@ switch($_SERVER['REQUEST_METHOD']){
             case 'login':
                 echo json_encode($auth->login($data));
                 break;
+            
+            case 'createrecipe':
+                echo json_encode($global->insert("recipes",$data));
+            break;
                 
             case 'addfile':
                 echo json_encode($global->file('cdm_guest', $data, NULL));
