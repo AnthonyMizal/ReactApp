@@ -2,16 +2,13 @@ import React, {useState, useEffect} from 'react';
 import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
 import {COLORS} from '../../constants/colors';
 import {useFonts} from 'expo-font';
-import {ROUTES} from '../../constants/routes';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Searchfilter from '../../components/searchfilter';
 import Categoryfilter from '../../components/categoryFilter';
 import axios from 'axios';
 
 const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
-const xml =`
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ffffff" fill-opacity="1" d="M0,224L80,186.7C160,149,320,75,480,80C640,85,800,171,960,192C1120,213,1280,171,1360,149.3L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
-`;
+
 
 
 
@@ -19,11 +16,7 @@ const Home = ({navigation}) => {
   const [recipelist, setRecipelist] = useState([]);
 
   useEffect(() => {
-    // axios.post(`http://192.168.18.43/PcookApp/restAPI/getRecipeDetails`).then((response) => {
-    //   // setRecipe(response.data);
-    //   alert(response.data);
-    // });
-    const url = `${baseUrl}getRecipeDetails`;
+
     const fetchRecipe = async () => {
       try {
         const response = await axios.post(`${baseUrl}getRecipeDetails`, {
@@ -33,6 +26,7 @@ const Home = ({navigation}) => {
           // alert(response.data.payload[0].cooking_time);
           // console.log(response.data.payload[0]);
           setRecipelist(response.data.payload);
+          console.log(response.data.payload)
         } else {
           throw new Error("An error has occurred");
         }
@@ -125,20 +119,7 @@ const Home = ({navigation}) => {
   }
   console.log(itemCategory)
 
-//   axios.get(`${baseUrl}/getRecipeDetails`, {
-//     params: {
-//       id: id
-//     }
-// })
-//     .then(function (response) {
-//         console.log(response);
-//     })
-//     .catch(function (error) {
-//         console.log(error);
-//     })
-//     .then(function () {
-//         // always executed
-//     }); 
+
 
 
     return (
@@ -167,7 +148,7 @@ const Home = ({navigation}) => {
           <Category category="Dessert"/>
           <Category category="Dessert"/> */}
           {categories.map(e => (
-            <Categoryfilter data={categories} input={itemCategory} />
+            <Categoryfilter data={categories} input={itemCategory} key={categories.id}/>
           ))
           
           }
@@ -180,7 +161,7 @@ const Home = ({navigation}) => {
           <View style={styles.recipeTxtCont}>
             <Text style={styles.recipeTxt}>RECIPES</Text>
           </View>
-          <Searchfilter data={recipelist} input={item} setInput={setRecipe} navigation={navigation}/>
+          <Searchfilter data={recipelist} input={item} setInput={setRecipe} navigation={navigation} key={item.id}/>
         </View>
         
       </ScrollView>

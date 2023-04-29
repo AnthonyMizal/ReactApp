@@ -184,6 +184,39 @@ class GlobalMethods {
    
     }
 
+    function fileuploadmodule($file)
+    {
+        /* Getting file name */
+        $allowedExts = array("gif", "jpeg", "jpg", "png");
+        $temp = explode(".", $file["file"]["name"]);
+        $extension = strtolower(end($temp));
+        if ((($file["file"]["type"] == "image/gif")
+                || ($file["file"]["type"] == "image/jpeg")
+                || ($file["file"]["type"] == "image/jpg")
+                || ($file["file"]["type"] == "image/pjpeg")
+                || ($file["file"]["type"] == "image/x-png")
+                || ($file["file"]["type"] == "image/png"))
+            && ($file["file"]["size"] < 2000000)
+            && in_array($extension, $allowedExts)
+        ) {
+            if ($file["file"]["error"] > 0) {
+            } else {
+                $filename = $file["file"]["name"];
+                $location = '../assets/recipeImage/' . $filename;
+                if (file_exists($location)) {
+                    unlink($location);
+                }
+                move_uploaded_file(
+                    $file["file"]["tmp_name"],
+                    "../assets/recipeImage/" . $filename
+                );
+                return $location;
+            }
+        } else {
+        }
+        
+    }
+
     public function pdffile($table_name, $data, $condition_string){
         // so i got bored and copied the insert code..
         // and changed some stuff..

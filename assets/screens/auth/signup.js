@@ -96,7 +96,7 @@ const Signup = (props) =>  {
         <TextInput style={styles.input} placeholder='Fullname' value={fullname} onChangeText={onChangeNameHandler}/>
         <TextInput style={styles.input} placeholder='Email' value={email} onChangeText={onChangeEmailHandler}/>
         <TextInput style={styles.input} placeholder='Username' value={username} onChangeText={onChangeUsernameHandler}/>
-        <TextInput style={styles.input} placeholder='Password' value={password} onChangeText={onChangePasswordHandler}/>
+        <TextInput style={styles.input} placeholder='Password' value={password} onChangeText={onChangePasswordHandler} secureTextEntry/>
      
 
       </View>

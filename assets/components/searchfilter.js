@@ -38,16 +38,16 @@ const Searchfilter = ({data, input, setInput, navigation}) => {
                     </View>
                 </TouchableOpacity> )
             }
-            if(item.recipeTitle.toLowerCase().includes(input.toLowerCase())) {
+            if(item.name.toLowerCase().includes(input.toLowerCase())) {
                 return ( 
                  <TouchableOpacity style={styles.recipeCont} key={item.id} onPress={() => navigation.navigate(ROUTES.RECIPE_DETAILS)}> 
                      <View style={styles.rightCont}>
-                         <Image style={styles.recipeImg} source={item.recipeImg}/>
+                         <Image style={styles.recipeImg} source={item.img_location}/>
                      </View>
                      <View style={styles.middleCont}>
-                         <Text style={styles.recipeTitle}>{item.recipeTitle}</Text>
+                         <Text style={styles.recipeTitle}>{item.name}</Text>
                          <Text style={styles.recipeCreator}>by {item.recipeCreator}</Text>
-                         <Text style={styles.recipeTD}>{item.recipeTD}</Text>
+                         <Text style={styles.recipeTD}>{item.cooking_time} | {item.difficulty}</Text>
                      </View>
                      <View style={styles.leftCont}>
                          <BookmarkButton/>
