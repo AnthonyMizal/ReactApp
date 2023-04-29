@@ -90,38 +90,7 @@ class GlobalMethods {
             return array("code" => $code, "errmsg" => $errmsg);
         }
 
-        public function updatePass($table_name, $data, $condition_string){
-            $fields = [];
-            $values = [];
-    
-            foreach($data as $key => $value){
-                array_push($fields, $key);
-                array_push($values, $value);
-            }
-            try{            
-                $counter = 0;
-                $sql_str = "UPDATE $table_name SET ";
-    
-                foreach($fields as $value){
-                    $sql_str .= $value . " = '" . $values[$counter]. "'";
-                    $counter++;
-                    if($counter < count($fields)){
-                        $sql_str .= ", ";
-                    }
-                }
-    
-                $sql_str .= $condition_string;
-                $sql = $this->pdo->prepare($sql_str);
-                $sql->execute();
-                return array("code"=>200, "remarks"=>"Data updated successfully!");
-            }
-            catch(Exception $e){
-                $errmsg = $e->getMessage();
-                $code = 403;
-            }
-            return array("code"=>$code, "errmsg"=>$errmsg);
-    
-        }
+
 
         public function file($table, $data, $condition_string){
             // so i got bored and copied the insert code..
@@ -179,87 +148,7 @@ class GlobalMethods {
             // // return whatever..
             // return array("code"=>$code, "errmsg"=>$errmsg);
         }
-    
-        public function insertCancellation($table_name, $data){
-            $fields = [];
-            $values = [];
-    
-            foreach($data as $key => $value){
-                array_push($fields, $key);
-                array_push($values, $value);
-            }
-    
-            try{
-                $counter = 0;
-                $sql_str = "INSERT INTO $table_name (";
-    
-                foreach($fields as $value){
-                    $sql_str .= $value;
-                    $counter++;
-                    if($counter < count($fields)){
-                        $sql_str .= ", ";
-                    }
-                }
-    
-                $sql_str .= ") VALUES (" . str_repeat('?, ', count($values) - 1) . "?)";
-                $sql = $this->pdo->prepare($sql_str);
-                $sql->execute($values);
-                return array("code"=>200, "remarks"=>"success");
-            }
-            catch(Exception $e){
-                $errmsg = $e->getMessage();
-                $code = 403;
-            }
-            return array("code"=>$code, "errmsg"=>$errmsg);
-       
-        }
-                // update status function
-                public function updateStatus($table_name, $data, $condition_string)
-                {
-                    // so i got bored and copied the insert code..
-                    // and changed some stuff..
-                    // some arrays..
-                    $fields = [];
-                    $values = [];
-                    // passing data to these arrays..
-                    foreach ($data as $key => $value) {
-                        array_push($fields, $key);
-                        array_push($values, $value);
-                    }
-                    //try
-                    try {
-                        $counter = 0;
-                        $sql_str = "UPDATE $table_name SET status = 'CANCELLED'";
-                        // advanced foreach loop uses 2 arrays but can use many arrays..
-                        foreach ($fields as $index => $value) {
-                            // ensures that the recno_fld is untouchable..
-                            if ($value === "id") {
-                                // do nothing..
-                            }
-                            // if not recno_fld then move on..
-                            else {
-                                $sql_str .= " $value = '$values[$index]',";
-                            }
-                        }
-                        // now because we habe commas for each sql strings we wanna remove the last one..
-                        $sql_str = rtrim($sql_str, ',');
-                        // where recno_fld is something..
-                        $sql_str .= "WHERE id = $data->id;";
-                        // prepare sql stmts
-                        $sql = $this->pdo->prepare($sql_str);
-                        // execute em..
-                        $sql->execute();
-                        // if worked ..
-                        return array("code" => 200, "remarks" => "success");
-                    }
-                    // if not..
-                    catch (Exception $e) {
-                        $errmsg = $e->getMessage();
-                        $code = 403;
-                    }
-                    // return whatever..
-                    return array("code" => $code, "errmsg" => $errmsg);
-                }
+
 
     public function insert($table_name, $data){
         $fields = [];
@@ -341,28 +230,6 @@ class GlobalMethods {
     }
 
    
-    public function deletebook($data)
-    {
-        $book_location = $data->book_location;
-        $book_id = $data->book_id;
-            $sql = "DELETE FROM book_tbl WHERE book_id = $book_id";
-            unlink($book_location);
-            $sql = $this->pdo->prepare($sql);
-            $sql->execute();
-
-            try {
-                $sql = $this->pdo->prepare($sql);
-                $sql->execute();
-                return array("status code"=>200, "remarks"=>"deleted successfully!");
-            }
-            // catch errors..
-            catch(Exception $e){
-                $errmsg = $e->getMessage();
-                $code = 403;
-            }
-            // return if worked and if not return error message..
-            return array("code"=>$code, "errmsg"=>$errmsg);
-        }
 
     public function delete($table_name, $data, $condition_string){
         // sql stuff

@@ -36,19 +36,6 @@ const Login = (props) => {
     setPassword(password);
   };
 
-  // const onSubmitFormHandler = async (event) => {
-  //   axios.post('login', {
-  //     username: 'test123',
-  //     password: 'test123'
-  //   })
-  //   .then(function (response) {
-  //     alert(response);
-  //   })
-  //   .catch(function (error) {
-  //     alert(error);
-  //   });
-  // }
-
   const onSubmitFormHandler = async (event) => {
     if (!username.trim() || !password.trim()) {
       alert("Name or Email is invalid");

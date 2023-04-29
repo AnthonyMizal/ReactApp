@@ -99,7 +99,7 @@ const Addrecipe = ({navigation}) => {
     return (
     <View style={styles.container}>
       <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.navigate(ROUTES.HOME)}>
+          <TouchableOpacity onPress={() => navigation.navigate(ROUTES.RECIPE_HOME)}>
             <Icon
                 name= 'arrow-left'
                 size={28}
@@ -127,7 +127,7 @@ const Addrecipe = ({navigation}) => {
             <Text style={styles.textUploadBtn}>Choose Image</Text>
           </TouchableOpacity>
         </View> */}
-        <UploadImage/>
+        <UploadImage />
         <View>
           <Text style={styles.textInput}>Name of recipe:</Text>
           <TextInput  style={styles.input} placeholder='Type here the name of the recipe...' value={name} onChangeText={onChangeNameHandler}/>

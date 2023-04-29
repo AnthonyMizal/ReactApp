@@ -11,5 +11,8 @@ export const ROUTES =  {
     MANAGE_RECIPE: 'ManageRecipe',
     PROFILENAVIGATOR: 'ProfileNavigator',
     HOME_NAVIGATOR: 'HomeBottomTab',
-    AUTH_NAVIGATOR: 'AuthNavigator'
+    AUTH_NAVIGATOR: 'AuthNavigator',
+    RECIPE_HOME: 'RecipeHome',
+    RECIPE_DETAILS: 'RecipeDetails',
+    RECIPE_HOME_NAVIGATOR: 'RecipeHomeNavigator'
 }

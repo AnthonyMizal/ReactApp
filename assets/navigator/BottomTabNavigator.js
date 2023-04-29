@@ -8,6 +8,7 @@ import Bookmark from '../screens/home/bookmark';
 import {ROUTES} from '../constants/routes';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ProfileNavigator from './ProfileNavigator';
+import RecipeNavigator from './RecipeNavigator';
 
 
 const Tab = createBottomTabNavigator();
@@ -28,7 +29,7 @@ const BottomTabNavigator = () => {
         tabBarShowLabel: false,
         headerShown: false,
       })}>
-      <Tab.Screen name={ROUTES.HOME} component={Home}
+      <Tab.Screen name={ROUTES.RECIPE_HOME_NAVIGATOR} component={RecipeNavigator}
       options={{
         tabBarIcon: ({focused}) => (
           <View

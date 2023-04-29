@@ -76,9 +76,9 @@ const Signup = (props) =>  {
   };
 
     return (
-      <ScrollView vertical={true} showsVerticalScrollIndicator={false}>
-    <View style={styles.container} >
       
+    <View style={styles.container} >
+      <ScrollView vertical={true} showsVerticalScrollIndicator={false} style={styles.scrollview}>
       <View style={styles.box}>
         <View style={styles.picContainer}>
           
@@ -110,17 +110,21 @@ const Signup = (props) =>  {
         <Text style={styles.registerTxt}>LOGIN</Text>
         </TouchableOpacity>
       </View>
-      
+      </ScrollView>
      </View>
-    </ScrollView>
+    
     )
 }
 
 const styles = StyleSheet.create({
+  // scrollview: {
+  //   flex: 1,
+  // },
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
     alignItems: 'center',
+    justifyContent: 'center'
   },
   box: {
     backgroundColor: '#A1FFB1',
@@ -176,7 +180,7 @@ const styles = StyleSheet.create({
     padding: 18,
     paddingHorizontal: 100,
     borderRadius: 30,
-    width: '80%',
+    width: '100%',
     alignItems: 'center'
   },
   getStartedTxt: {
@@ -190,7 +194,7 @@ const styles = StyleSheet.create({
     padding: 18,
   },
   inputWrapper: {
-    width: '80%',
+    width: '100%',
     gap: 20,
     marginTop: 40
   },
