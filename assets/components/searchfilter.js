@@ -30,7 +30,7 @@ const Searchfilter = ({data, input, setInput, navigation}) => {
           
                     <View style={styles.middleCont}>
                         <Text style={styles.recipeTitle}>{item.name}</Text>
-                        <Text style={styles.recipeCreator}>by {item.recipeCreator}</Text>
+                        <Text style={styles.recipeCreator}>by {item.fullname}</Text>
                         <Text style={styles.recipeTD}>{item.cooking_time} | {item.difficulty}</Text>
                     </View>
                     <View style={styles.leftCont}>
@@ -46,7 +46,7 @@ const Searchfilter = ({data, input, setInput, navigation}) => {
                      </View>
                      <View style={styles.middleCont}>
                          <Text style={styles.recipeTitle}>{item.name}</Text>
-                         <Text style={styles.recipeCreator}>by {item.recipeCreator}</Text>
+                         <Text style={styles.recipeCreator}>by {item.fullname}</Text>
                          <Text style={styles.recipeTD}>{item.cooking_time} | {item.difficulty}</Text>
                      </View>
                      <View style={styles.leftCont}>

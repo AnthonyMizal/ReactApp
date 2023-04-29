@@ -6,7 +6,7 @@ import { SvgXml } from 'react-native-svg';
 import {useFonts} from 'expo-font';
 import {ROUTES} from '../../constants/routes';
 import axios from 'axios';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
 const xml =`
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ffffff" fill-opacity="1" d="M0,224L80,186.7C160,149,320,75,480,80C640,85,800,171,960,192C1120,213,1280,171,1360,149.3L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
@@ -47,11 +47,15 @@ const Login = (props) => {
         password
       });
       if (response.status === 200) {
-        alert(` You have succesfully logged in!`);
+        // console.log(response.data.payload.id);
         setUsername('');
         setPassword('');
         // return navigation.navigate(ROUTES.LOGIN);
+        storeUserID(response.data.payload.id);
+
+        // alert(storeUser);
         return navigation.navigate(ROUTES.HOME_NAVIGATOR)
+
       } else {
         throw new Error("An error has occurred");
       }
@@ -60,6 +64,16 @@ const Login = (props) => {
     }
   };
 
+  const storeUserID = async (value) => {
+    try {
+      await AsyncStorage.setItem("user", JSON.stringify(value));
+      // console.log(JSON.stringify(value));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  AsyncStorage.getItem("user").then((value) => console.log(value))
     return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>

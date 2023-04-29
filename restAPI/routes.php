@@ -32,6 +32,10 @@ switch($_SERVER['REQUEST_METHOD']){
             //     echo json_encode($auth->uploadimage($data));
             // break;
 
+            case 'addImagefile':
+                echo json_encode($get->file('recipes', $data, NULL));
+            break;
+
             case 'register':
                 echo json_encode($auth->register($data));
                 break;
@@ -40,21 +44,18 @@ switch($_SERVER['REQUEST_METHOD']){
                 echo json_encode($auth->login($data));
                 break;
             
+
             case 'createrecipe':
                 echo json_encode($global->insert("recipes",$data));
             break;
                 
             case 'getRecipeDetails':
                 if(count($req)>1){
-                    echo json_encode($get->get_common('recipes', "id = '$req[1]'"));
+                    echo json_encode($get->get_recipe('recipes', "id = '$req[1]'"));
                 }
                 else{
-                    echo json_encode($get->get_common('recipes'));
+                    echo json_encode($get->get_recipe('recipes'));
                 }   
-            break;
-
-            case 'addfile':
-                echo json_encode($global->file('recipes', $data, NULL));
             break;
 
             case 'updateProfile':
@@ -76,6 +77,17 @@ switch($_SERVER['REQUEST_METHOD']){
                 echo json_encode($auth->updatePassword($data));
             break;
 
+            case 'fileupload':
+                $data = [
+                    'file' => $_FILES,
+                    'id' => $_REQUEST['id']
+                ];
+                echo json_encode($global->uploadimage($data));
+                break;
+
+            case 'addnewproductnoimage':
+                echo json_encode($global->addnewrecipenoimage($data));
+                break;
 
             default:
                 echo "request not found";

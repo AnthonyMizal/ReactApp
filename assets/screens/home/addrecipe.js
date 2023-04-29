@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView,} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView, Button} from 'react-native';
 import {COLORS} from '../../constants/colors';
 import {useFonts} from 'expo-font';
 import {ROUTES} from '../../constants/routes';
@@ -8,16 +8,38 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SelectDropdown from 'react-native-select-dropdown';
 import { ScrollView } from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import Recipe from '../../components/recipe';
+// import Recipe from '../../components/recipe';
 import UploadImage from '../../components/uploadImage';
+// import ImagePicker from 'react-native-image-crop-picker';
 const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
 
 
 const difficulty_picker = ["EASY", "MEDIUM", "HARD"];
 const category_picker = ["BREAKFAST", "LUNCH", "DINNER", "DESSERT"];
+
+// const createFormData = (photo, body = {}) => {
+//   const data = new FormData();
+
+//   data.append('photo', {
+//     name: photo.fileName,
+//     type: photo.type,
+//     uri: Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri,
+//   });
+
+//   Object.keys(body).forEach((key) => {
+//     data.append(key, body[key]);
+//   });
+
+//   return data;
+// };
+
+
+
 const Addrecipe = ({navigation}) => {
-  const [img_location, setLocation] = useState("");
+  // const [photo, setPhoto] = useState(null);
+  const [user_id, setUser_Id] = useState("");
   const [name, setName] = useState("");
   const [video_link, setVidLink] = useState("");
   const [cooking_time, setTime] = useState();
@@ -68,14 +90,19 @@ const Addrecipe = ({navigation}) => {
     setDirections(directions);
   };
 
+  AsyncStorage.getItem("user").then((value) => setUser_Id(value));
+
   const onSubmitFormHandler = async (event) => {
     // if (!fullname.trim() || !email.trim() || !username.trim() || !password.trim()) {
     //   alert("Name or Email is invalid");
     //   return;
     // }
+
+    
     try {
       const response = await axios.post(`${baseUrl}createrecipe`, {
-        img_location,
+        // img_location,
+        user_id,
         name,
         video_link,
         cooking_time,
@@ -83,7 +110,9 @@ const Addrecipe = ({navigation}) => {
         category,
         ingredients,
         directions
-      });
+      }
+      
+      );
       if (response.status === 200) {
         alert(` You have succesfully created an account!`);
 
@@ -96,8 +125,29 @@ const Addrecipe = ({navigation}) => {
     }
   };
 
+
+  // const addImage = () => {
+  //   let image = ImagePicker.openPicker({
+  //     width: 300,
+  //     height: 400,
+  //     cropping: true
+  //   }).then(image => {
+  //     console.log(image);
+  //   });
+  // }
+
+  // const handleChoosePhoto = () => {
+  //   launchImageLibrary({ noData: true }, (response) => {
+  //     // console.log(response);
+  //     if (response) {
+  //       setPhoto(response);
+  //     }
+  //   });
+  // };
+
     return (
     <View style={styles.container}>
+      
       <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.navigate(ROUTES.RECIPE_HOME)}>
             <Icon
@@ -105,6 +155,7 @@ const Addrecipe = ({navigation}) => {
                 size={28}
                 color={'#31C84F'}
               />
+            
           </TouchableOpacity>
           <View style={styles.iconCont}>
             <Image style={styles.icon} source={require('../../addrecipe.png')} />
@@ -127,7 +178,8 @@ const Addrecipe = ({navigation}) => {
             <Text style={styles.textUploadBtn}>Choose Image</Text>
           </TouchableOpacity>
         </View> */}
-        <UploadImage />
+        {/* <Button title="Choose Photo" onPress={handleChoosePhoto} /> */}
+        <UploadImage/>
         <View>
           <Text style={styles.textInput}>Name of recipe:</Text>
           <TextInput  style={styles.input} placeholder='Type here the name of the recipe...' value={name} onChangeText={onChangeNameHandler}/>

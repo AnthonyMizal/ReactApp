@@ -11,12 +11,72 @@ class Get{
         $this->gm = new GlobalMethods($pdo);
     }
 
+    public function file($table, $data, $condition_string){
+        // so i got bored and copied the insert code..
+        // and changed some stuff..
+        // some arrays..
+        //try
+        // $profile_location = $data->profile_pic;
+        $id = $_GET['id'];
+        try{
+            
+            if($_FILES['file']['name'] != ''){
+                $test = explode('.', $_FILES['file']['name']);
+                $extension = end($test);    
+                $allowedExts = array("jpeg", "jpg", "png");
+            if ((($_FILES["file"]["type"] == "image/jpeg")
+                || ($_FILES["file"]["type"] == "image/jpg")
+                || ($_FILES["file"]["type"] == "image/pjpeg")
+                || ($_FILES["file"]["type"] == "image/x-png")
+                || ($_FILES["file"]["type"] == "image/png"))
+            && ($_FILES["file"]["size"] < 200000000)
+            // for 15 mb 
+            // && ($_FILES["file"]["size"] < 15000)
+            && in_array($extension, $allowedExts)
+             )
+                $name = date("Y-m-d").rand(100,999999999999).'.'.$extension;
+                // $location = '../uploads/'.$name;
+                $location = '../assets/recipeimages/'.$name;
+                move_uploaded_file($_FILES['file']['tmp_name'], $location);
+                
+            }
+        //     $sql_str1 = "SELECT profile_picture FROM $table WHERE id = '$id'";
+            
+        //     // prepare sql stmts
+        //     $sql1 = $this->pdo->prepare($sql_str1);
+        //    // var_dump($sql);
+        //     // execute em..
+        //     $sql1->execute();
+        //     unlink($location);
+        $sql_str = "UPDATE $table SET img_location = '$location' WHERE id = '$id'";
+        // unlink($location);
+        
+        // prepare sql stmts
+        $sql = $this->pdo->prepare($sql_str);
+       // var_dump($sql);
+        // execute em..
+        $sql->execute();
+        
+            
+            
+            // if worked ..
+            // return array("Successfully uploaded!");
+        }
+        // if not..
+        catch(Exception $e){
+            $errmsg = $e->getMessage();
+            $code = 403;
+        }
+        // // return whatever..
+        // return array("code"=>$code, "errmsg"=>$errmsg);
+    }
+
 
         // get booking function
-        public function get_booking($table, $condition = null){
+        public function get_recipe($table, $condition = null){
             // 2-Confirm 1-Tentative 0-Cancel	
-            $sql = "SELECT reservation_appointments.*, billing_invoice.total_amount FROM reservation_appointments 
-            JOIN billing_invoice ON reservation_appointments.invoice_id = billing_invoice.id";
+            $sql = "SELECT recipes.*, users.fullname FROM recipes
+            JOIN users ON recipes.user_id = users.id";
             if ($condition != null) {
                 $sql .= " WHERE {$condition}";
             }

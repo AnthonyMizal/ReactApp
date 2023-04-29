@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Searchfilter from '../../components/searchfilter';
 import Categoryfilter from '../../components/categoryFilter';
 import axios from 'axios';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
 
 
@@ -14,6 +14,8 @@ const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
 
 const Home = ({navigation}) => {
   const [recipelist, setRecipelist] = useState([]);
+
+
 
   useEffect(() => {
 
@@ -27,6 +29,7 @@ const Home = ({navigation}) => {
           // console.log(response.data.payload[0]);
           setRecipelist(response.data.payload);
           console.log(response.data.payload)
+
         } else {
           throw new Error("An error has occurred");
         }
@@ -36,6 +39,7 @@ const Home = ({navigation}) => {
     };
     fetchRecipe();
   }, []);
+
 
 
   const categories = [
@@ -118,6 +122,7 @@ const Home = ({navigation}) => {
     return null;
   }
   console.log(itemCategory)
+
 
 
 

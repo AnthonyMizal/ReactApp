@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@ant-design/icons-react-native": "^2.3.2",
+    "@react-native-async-storage/async-storage": "^1.18.1",
+    "@react-native-community/cli-debugger-ui": "^11.2.0",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/stack": "^6.3.16",
@@ -24,12 +26,15 @@
     "react-native": "0.71.3",
     "react-native-document-picker": "^8.2.0",
     "react-native-gesture-handler": "~2.9.0",
+    "react-native-image-crop-picker": "^0.39.0",
+    "react-native-image-picker": "^5.3.1",
     "react-native-ionicons": "^4.6.5",
     "react-native-safe-area-context": "4.5.0",
     "react-native-screens": "~3.20.0",
     "react-native-select-dropdown": "^3.3.2",
     "react-native-svg": "13.4.0",
-    "react-native-vector-icons": "^9.2.0"
+    "react-native-vector-icons": "^9.2.0",
+    "rn-cook": "^0.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

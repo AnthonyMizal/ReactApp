@@ -184,7 +184,45 @@ class GlobalMethods {
    
     }
 
-    function fileuploadmodule($file)
+
+
+
+
+    public function uploadimage($received_data)
+    {
+        $file = $received_data['file'];
+        $recipe_id= $received_data['id'];
+        $location = fileuploadmodule($file);
+        if ($location == "file exist") {
+            $code = 403;
+            return $this->gm->returnPayload(null, "Failed", "File already exist in the directory!", $code);
+        } else {
+            $data = array(
+                "location" => $location
+            );
+            $result = $this->gm->update("recipes", $data, " WHERE id = '$recipe_id'");
+            $code = 200;
+            return $this->gm->returnPayload(null, "success", "Image Successfully uploaded!", $code);
+        }
+    }
+
+   
+
+    public function addnewproductnoimage($received_data)
+    {        
+        $result = $this->gm->insert("recipes", $received_data);
+        $sql = "SELECT MAX(id) AS id from recipes";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        $res = $stmt->fetchAll()[0];
+        $id = $res['id'];
+        $payload = array(
+            "id" => $id
+        );
+        $code = 200;
+        return $this->gm->returnPayload($payload, "success", "Image Successfully uploaded!", $code);
+    }
+    public function fileuploadmodule($file)
     {
         /* Getting file name */
         $allowedExts = array("gif", "jpeg", "jpg", "png");
@@ -202,13 +240,13 @@ class GlobalMethods {
             if ($file["file"]["error"] > 0) {
             } else {
                 $filename = $file["file"]["name"];
-                $location = '../assets/recipeImage/' . $filename;
+                $location = '../assets/recipeimages/' . $filename;
                 if (file_exists($location)) {
                     unlink($location);
                 }
                 move_uploaded_file(
                     $file["file"]["tmp_name"],
-                    "../assets/recipeImage/" . $filename
+                    "../assets/recipeimages/" . $filename
                 );
                 return $location;
             }
@@ -216,7 +254,7 @@ class GlobalMethods {
         }
         
     }
-
+ 
     public function pdffile($table_name, $data, $condition_string){
         // so i got bored and copied the insert code..
         // and changed some stuff..
