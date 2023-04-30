@@ -57,13 +57,13 @@ const Searchfilter = ({data, input, setInput, navigation}) => {
                         <Text style={styles.recipeTD}>{item.cooking_time} | {item.difficulty}</Text>
                     </View>
                     <View style={styles.leftCont}>
-                        <BookmarkButton/>
+                        <BookmarkButton data={item.id}/>
                     </View>
                 </TouchableOpacity> )
             }
             if(item.name.toLowerCase().includes(input.toLowerCase())) {
                 return ( 
-                 <TouchableOpacity style={styles.recipeCont} key={item.id} onPress={() => navigation.navigate(ROUTES.RECIPE_DETAILS)}> 
+                 <TouchableOpacity style={styles.recipeCont} key={item.id} onPress={() => navigation.navigate(ROUTES.RECIPE_DETAILS, item)}> 
                      <View style={styles.rightCont}>
                          <Image style={styles.recipeImg} source={item.img_location}/>
                      </View>
@@ -73,7 +73,7 @@ const Searchfilter = ({data, input, setInput, navigation}) => {
                          <Text style={styles.recipeTD}>{item.cooking_time} | {item.difficulty}</Text>
                      </View>
                      <View style={styles.leftCont}>
-                         <BookmarkButton/>
+                         <BookmarkButton data={item}/>
                      </View>
                  </TouchableOpacity> )
              }

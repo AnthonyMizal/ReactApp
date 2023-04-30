@@ -302,11 +302,9 @@ class GlobalMethods {
 
    
 
-    public function delete($table_name, $data, $condition_string){
+    public function delete($table_name, $condition_string){
         // sql stuff
-        $book_location = $data->book_location;
         $sql = "DELETE FROM $table_name WHERE {$condition_string}";
-        unlink($book_location);
         // try sql if worked..
         try {
             $sql = $this->pdo->prepare($sql);

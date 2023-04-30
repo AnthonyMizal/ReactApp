@@ -111,7 +111,21 @@ class Get{
             $sql = "SELECT recipes.*, users.fullname FROM recipes
             JOIN users ON recipes.user_id = users.id";
 
+            $res = $this->gm->executeQuery($sql);
+            if ($res['code'] == 200) {
+                return $this->gm->returnPayload($res['data'], "success", "Succesfully retieved Booking History", $res['code']);
+            }
     
+            return $this->gm->returnPayload(null, "failed", "failed to retrieve Booking History", $res['code']);
+        }
+
+        public function get_favorites_recipe($table, $condition = null){
+            // 2-Confirm 1-Tentative 0-Cancel	
+            $sql = "SELECT bookmark.*, recipes.*, users.fullname FROM recipes JOIN users ON users.id = recipes.user_id JOIN bookmark ON recipes.id = bookmark.recipe_id GROUP BY bookmark.recipe_id";
+
+            if ($condition != null) {
+                $sql .= " HAVING {$condition}";
+            }
             $res = $this->gm->executeQuery($sql);
             if ($res['code'] == 200) {
                 return $this->gm->returnPayload($res['data'], "success", "Succesfully retieved Booking History", $res['code']);

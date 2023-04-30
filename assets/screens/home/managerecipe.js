@@ -12,13 +12,17 @@ const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
 
 const ManageRecipe = () => {
   const [recipelist, setRecipelist] = useState([]);
-  const [user_id, setUser_Id] = useState();
+  // const [user_id, setUser_Id] = useState();
   
-  AsyncStorage.getItem("user").then((value) => setUser_Id(value));
+  // AsyncStorage.getItem("user").then((value) => setUser_Id(value));
   const [refreshing, setRefreshing] = useState(false);
-
+  user_id = "";
+  useEffect(() => {
+    fetchRecipe();
+  }, []);
 
   const fetchRecipe = async () => {
+    user_id = await AsyncStorage.getItem("user");
     try {
       const response = await axios.post(`${baseUrl}getRecipeDetails/${user_id}`, {
       });
@@ -44,9 +48,7 @@ const ManageRecipe = () => {
     }, 2000);
   }, []);
 
-  useEffect(() => {
-    fetchRecipe();
-  }, []);
+
 
   const categories = [
     {

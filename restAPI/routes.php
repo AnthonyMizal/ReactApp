@@ -67,6 +67,28 @@ switch($_SERVER['REQUEST_METHOD']){
                 }   
             break;
 
+            case 'addtobookmark':
+                echo json_encode($global->insert("bookmark",$data));
+            break; 
+
+            case 'deletebookmark':
+                if(count($req)>1){
+                    echo json_encode($global->delete('bookmark', "recipe_id = '$req[1]' AND user_id = '$req[2]'"));
+                }
+            break;
+
+            case 'checkBookmark':
+                if (count($req) > 1) {
+                    echo json_encode($get->get_common('bookmark', "recipe_id = '$req[1]' AND user_id = '$req[2]'"));
+                }
+                break;
+
+            case 'getFavoriteRecipes':
+                if(count($req)>1){
+                    echo json_encode($get->get_favorites_recipe('bookmark', "bookmark.user_id = '$req[1]'"));
+                }
+            break;
+
             case 'updateProfile':
                 echo json_encode($global->update('users', $data, NULL));
             break;
