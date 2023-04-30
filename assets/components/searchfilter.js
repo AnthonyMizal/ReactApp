@@ -5,9 +5,32 @@ import {useFonts} from 'expo-font';
 import {ROUTES} from '../constants/routes';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import BookmarkButton from './bookmarkBtn';
-
+import axios from 'axios';
+const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
 
 const Searchfilter = ({data, input, setInput, navigation}) => {
+    // const [recipe_id, setRecipe_Id] = useState();
+
+    // const onClickRecipe = async (recipe_id) => {
+    //     try {
+    //       const response = await axios.post(`${baseUrl}viewRecipeDetails/${recipe_id}`, {
+    //       });
+    //       if (response.status === 200) {
+    //         console.log(response.data.payload);
+    //         // return navigation.navigate(ROUTES.LOGIN);
+    
+    //         // alert(storeUser);
+    //         return navigation.navigate(ROUTES.RECIPE_DETAILS)
+    
+    //       } else {
+    //         throw new Error("An error has occurred");
+    //       }
+    //     } catch (error) {
+    //       alert(error);
+    //     }
+    //   };
+
+
     let [fontsLoaded] = useFonts({
         'Momcake-Bold': require('../fonts/Momcake-Bold.otf'),
         'Momcake-Thin': require('../fonts/Momcake-Thin.otf'),
@@ -20,10 +43,10 @@ const Searchfilter = ({data, input, setInput, navigation}) => {
       }
 
     return (
-        <FlatList scrollEnabled={false} data={data} renderItem={({item}) => {
+        <FlatList scrollEnabled={false} data={data} keyExtractor={item => item.id.toString()} renderItem={({item}) => {
             if(input === "") {
                return ( 
-                <TouchableOpacity style={styles.recipeCont} key={item.id} onPress={() => navigation.navigate(ROUTES.RECIPE_DETAILS)}>
+                <TouchableOpacity style={styles.recipeCont} key={item.id} onPress={() => {navigation.navigate(ROUTES.RECIPE_DETAILS, item)}}>
                     <View style={styles.rightCont}>
                         <Image style={styles.recipeImg} source={item.img_location} />
                     </View>

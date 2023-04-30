@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView,} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView, FlatList} from 'react-native';
 import {COLORS} from '../../constants/colors';
 
 import {useFonts} from 'expo-font';
@@ -14,8 +14,39 @@ const xml =`
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ffffff" fill-opacity="1" d="M0,224L80,186.7C160,149,320,75,480,80C640,85,800,171,960,192C1120,213,1280,171,1360,149.3L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
 `;
 
-const RecipeDetails = ({navigation}) => {
-  
+
+
+const RecipeDetails = ({navigation, route}) => {
+  const recipeDetail = route.params;
+  console.log(recipeDetail);
+  // const [recipedetails, setRecipeDetails] = useState([]);
+
+  // useEffect(() => {
+
+  //   const fetchRecipe = async () => {
+  //     try {
+  //       const response = await axios.post(`${baseUrl}viewRecipeDetails/${recipe_id}`, {
+          
+  //       });
+  //       if (response.status === 200 || refreshing === true) {
+  //         // alert(response.data.payload[0].cooking_time);
+  //         // console.log(response.data.payload[0]);
+  //         setRecipeDetails(response.data);
+          
+
+  //       } else {
+  //         throw new Error("An error has occurred");
+  //       }
+  //     } catch (error) {
+
+  //     }
+  //   };
+  //   fetchRecipe();
+  // }, []);
+
+
+
+
   let [fontsLoaded] = useFonts({
     'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
     'Momcake-Thin': require('../../fonts/Momcake-Thin.otf'),
@@ -46,7 +77,7 @@ const RecipeDetails = ({navigation}) => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}>
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.body}>
-        <Text style={styles.text2}>PORK SISIG</Text>
+        <Text style={styles.text2}>{recipeDetail.name}</Text>
         <View style={styles.line}></View>
         
         <View style={styles.inputWholeCont}>

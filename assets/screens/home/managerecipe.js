@@ -18,32 +18,6 @@ const ManageRecipe = () => {
   const [refreshing, setRefreshing] = useState(false);
 
 
- 
-
-  useEffect(() => {
-
-    const fetchRecipe = async () => {
-      try {
-        const response = await axios.post(`${baseUrl}getRecipeDetails/${user_id}`, {
-        });
-        if (response.status === 200) {
-          // alert(response.data.payload[0].cooking_time);
-          // console.log(response.data.payload[0]);
-          setRecipelist(response.data.payload);
-          console.log(response.data.payload)
-
-        } else {
-          throw new Error("An error has occurred");
-        }
-      } catch (error) {
-
-      }
-    };
-    fetchRecipe();
-
-    
-  }, []);
-
   const fetchRecipe = async () => {
     try {
       const response = await axios.post(`${baseUrl}getRecipeDetails/${user_id}`, {
@@ -68,8 +42,10 @@ const ManageRecipe = () => {
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
-    
+  }, []);
 
+  useEffect(() => {
+    fetchRecipe();
   }, []);
 
   const categories = [

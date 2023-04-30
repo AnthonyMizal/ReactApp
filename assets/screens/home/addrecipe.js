@@ -115,8 +115,8 @@ const Addrecipe = ({navigation}) => {
       );
       if (response.status === 200) {
         alert(` You have succesfully created an account!`);
-
-        return navigation.navigate(ROUTES.HOME_NAVIGATOR);
+        return navigation.navigate(ROUTES.HOME);
+        
       } else {
         throw new Error("An error has occurred");
       }

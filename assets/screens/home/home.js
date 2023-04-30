@@ -16,7 +16,7 @@ const Home = ({navigation}) => {
   const [recipelist, setRecipelist] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
-
+  
 
 useEffect(() => {
 
@@ -29,7 +29,7 @@ useEffect(() => {
           // alert(response.data.payload[0].cooking_time);
           // console.log(response.data.payload[0]);
           setRecipelist(response.data.payload);
-          console.log(response.data.payload)
+          // console.log(response.data.payload.id);
 
         } else {
           throw new Error("An error has occurred");
@@ -41,6 +41,10 @@ useEffect(() => {
     fetchRecipe();
   }, []);
 
+
+
+
+
   const fetchRecipe = async () => {
     try {
       const response = await axios.post(`${baseUrl}getRecipeDetails`, {
@@ -50,7 +54,7 @@ useEffect(() => {
         // alert(response.data.payload[0].cooking_time);
         // console.log(response.data.payload[0]);
         setRecipelist(response.data.payload);
-        console.log(response.data.payload)
+        // console.log(response.data.payload)
 
       } else {
         throw new Error("An error has occurred");

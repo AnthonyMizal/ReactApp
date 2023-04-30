@@ -16,8 +16,9 @@ const ProfileNavigator = () => {
     initialRouteName={ROUTES.PROFILE}  >
         <Stack.Screen name={ROUTES.PROFILE} component={Profile}/>
         <Stack.Screen name={ROUTES.EDIT_PROFILE} component={EditProfile}/>
-        {/* <Stack.Screen name={ROUTES.LOGIN} component={Login}/> */}
         <Stack.Screen name={ROUTES.MANAGE_RECIPE} component={ManageRecipe}/>
+        {/* <Stack.Screen name={ROUTES.LOGIN} component={Login}/> */}
+        
         {/* <Stack.Screen name={ROUTES.AUTH_NAVIGATOR} component={AuthNavigator}/> */}
     </Stack.Navigator>
   );

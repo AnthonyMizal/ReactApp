@@ -58,6 +58,15 @@ switch($_SERVER['REQUEST_METHOD']){
                 }   
             break;
 
+            case 'viewRecipeDetails':
+                if(count($req)>1){
+                    echo json_encode($get->view_recipe_details('recipes', "recipes.id = '$req[1]'"));
+                }
+                else{
+                    echo json_encode($get->view_recipe_details('recipes'));
+                }   
+            break;
+
             case 'updateProfile':
                 echo json_encode($global->update('users', $data, NULL));
             break;
