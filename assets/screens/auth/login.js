@@ -66,6 +66,7 @@ const Login = (props) => {
 
   const storeUserID = async (value) => {
     try {
+      
       await AsyncStorage.setItem("user", JSON.stringify(value));
       // console.log(JSON.stringify(value));
     } catch (error) {

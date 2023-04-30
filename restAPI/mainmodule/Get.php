@@ -89,6 +89,20 @@ class Get{
             return $this->gm->returnPayload(null, "failed", "failed to retrieve Booking History", $res['code']);
         }
 
+        public function get_personal_recipe($table, $condition = null){
+            // 2-Confirm 1-Tentative 0-Cancel	
+            $sql = "SELECT recipes.*, users.fullname FROM recipes
+            JOIN users ON recipes.user_id = users.id";
+
+    
+            $res = $this->gm->executeQuery($sql);
+            if ($res['code'] == 200) {
+                return $this->gm->returnPayload($res['data'], "success", "Succesfully retieved Booking History", $res['code']);
+            }
+    
+            return $this->gm->returnPayload(null, "failed", "failed to retrieve Booking History", $res['code']);
+        }
+
 
         // get customer accounts
         public function get_account($table, $condition = null){

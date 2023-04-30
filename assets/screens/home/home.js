@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
+import React, {useState, useEffect, useCallback} from 'react';
+import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, TextInput, RefreshControl } from 'react-native';
 import {COLORS} from '../../constants/colors';
 import {useFonts} from 'expo-font';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -14,17 +14,18 @@ const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
 
 const Home = ({navigation}) => {
   const [recipelist, setRecipelist] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
 
 
-  useEffect(() => {
+useEffect(() => {
 
     const fetchRecipe = async () => {
       try {
         const response = await axios.post(`${baseUrl}getRecipeDetails`, {
           
         });
-        if (response.status === 200) {
+        if (response.status === 200 || refreshing === true) {
           // alert(response.data.payload[0].cooking_time);
           // console.log(response.data.payload[0]);
           setRecipelist(response.data.payload);
@@ -40,7 +41,32 @@ const Home = ({navigation}) => {
     fetchRecipe();
   }, []);
 
+  const fetchRecipe = async () => {
+    try {
+      const response = await axios.post(`${baseUrl}getRecipeDetails`, {
+        
+      });
+      if (response.status === 200 || refreshing === true) {
+        // alert(response.data.payload[0].cooking_time);
+        // console.log(response.data.payload[0]);
+        setRecipelist(response.data.payload);
+        console.log(response.data.payload)
 
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+
+    }
+  };
+
+  const onRefresh = useCallback(() => {
+    fetchRecipe();
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   const categories = [
     {
@@ -121,14 +147,17 @@ const Home = ({navigation}) => {
   if (!fontsLoaded) {
     return null;
   }
-  console.log(itemCategory)
+
 
 
 
 
 
     return (
-    <View style={styles.container}>
+      <ScrollView refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      } style={styles.container}>
+    <View>
       <View style={styles.header}>
       <Image style={styles.headinglogo} source={require('../../icons/heading.png')} />
       </View>
@@ -172,7 +201,7 @@ const Home = ({navigation}) => {
       </ScrollView>
         
     </View>
-    
+    </ScrollView>
     )
     
 }

@@ -51,7 +51,7 @@ switch($_SERVER['REQUEST_METHOD']){
                 
             case 'getRecipeDetails':
                 if(count($req)>1){
-                    echo json_encode($get->get_recipe('recipes', "id = '$req[1]'"));
+                    echo json_encode($get->get_recipe('recipes', "user_id = '$req[1]'"));
                 }
                 else{
                     echo json_encode($get->get_recipe('recipes'));

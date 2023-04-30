@@ -1,24 +1,77 @@
-import React, {useState} from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
+import React, {useState, useEffect, useCallback} from 'react';
+import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, TextInput, RefreshControl } from 'react-native';
 import {COLORS} from '../../constants/colors';
-import { SvgXml } from 'react-native-svg';
 import {useFonts} from 'expo-font';
-import {ROUTES} from '../../constants/routes';
-import Category from '../../components/category';
-import Recipe from '../../components/recipe';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Searchfilter from '../../components/searchfilter';
-import Categoryfilter from '../../components/categoryFilter';
 import YourRecipefilter from '../../components/yourrecipe';
-const xml =`
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ffffff" fill-opacity="1" d="M0,224L80,186.7C160,149,320,75,480,80C640,85,800,171,960,192C1120,213,1280,171,1360,149.3L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
-`;
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
 
 
 
 const ManageRecipe = () => {
+  const [recipelist, setRecipelist] = useState([]);
+  const [user_id, setUser_Id] = useState();
   
+  AsyncStorage.getItem("user").then((value) => setUser_Id(value));
+  const [refreshing, setRefreshing] = useState(false);
+
+
+ 
+
+  useEffect(() => {
+
+    const fetchRecipe = async () => {
+      try {
+        const response = await axios.post(`${baseUrl}getRecipeDetails/${user_id}`, {
+        });
+        if (response.status === 200) {
+          // alert(response.data.payload[0].cooking_time);
+          // console.log(response.data.payload[0]);
+          setRecipelist(response.data.payload);
+          console.log(response.data.payload)
+
+        } else {
+          throw new Error("An error has occurred");
+        }
+      } catch (error) {
+
+      }
+    };
+    fetchRecipe();
+
+    
+  }, []);
+
+  const fetchRecipe = async () => {
+    try {
+      const response = await axios.post(`${baseUrl}getRecipeDetails/${user_id}`, {
+      });
+      if (response.status === 200) {
+        // alert(response.data.payload[0].cooking_time);
+        // console.log(response.data.payload[0]);
+        setRecipelist(response.data.payload);
+        console.log(response.data.payload)
+
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+
+    }
+  };
+
+  const onRefresh = useCallback(() => {
+    fetchRecipe();
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+    
+
+  }, []);
+
   const categories = [
     {
       id: '1',
@@ -43,40 +96,40 @@ const ManageRecipe = () => {
   ]
 
 
-  const recipelist = [
-    {
-      id: '1',
-      recipeImg: require('../../sisig.jpg'),
-      recipeTitle: 'pork sisig',
-      recipeCreator: 'Jazmine Althea Isip',
-      recipeTD: '30 min | medium',
-      category: 'LUNCH'
-    },
-    {
-      id: '2',
-      recipeImg: require('../../crispypata.jpg'),
-      recipeTitle: 'Crispy Pata',
-      recipeCreator: 'Kim Padua',
-      recipeTD: '30 min | easy',
-      category: 'DINNER'
-    },
-    {
-      id: '3',
-      recipeImg: require('../../kaldereta.jpg'),
-      recipeTitle: 'kaldereta',
-      recipeCreator: 'Jasper Mamaril',
-      recipeTD: '30 min | hard',
-      category: 'DINNER'
-    },
-    {
-      id: '4',
-      recipeImg: require('../../adobo.jpg'),
-      recipeTitle: 'Adobo',
-      recipeCreator: 'Nathaniel Ribada',
-      recipeTD: '30 min | medium',
-      category: 'BREAKFAST'
-    }
-  ];
+  // const recipelist = [
+  //   {
+  //     id: '1',
+  //     recipeImg: require('../../sisig.jpg'),
+  //     recipeTitle: 'pork sisig',
+  //     recipeCreator: 'Jazmine Althea Isip',
+  //     recipeTD: '30 min | medium',
+  //     category: 'LUNCH'
+  //   },
+  //   {
+  //     id: '2',
+  //     recipeImg: require('../../crispypata.jpg'),
+  //     recipeTitle: 'Crispy Pata',
+  //     recipeCreator: 'Kim Padua',
+  //     recipeTD: '30 min | easy',
+  //     category: 'DINNER'
+  //   },
+  //   {
+  //     id: '3',
+  //     recipeImg: require('../../kaldereta.jpg'),
+  //     recipeTitle: 'kaldereta',
+  //     recipeCreator: 'Jasper Mamaril',
+  //     recipeTD: '30 min | hard',
+  //     category: 'DINNER'
+  //   },
+  //   {
+  //     id: '4',
+  //     recipeImg: require('../../adobo.jpg'),
+  //     recipeTitle: 'Adobo',
+  //     recipeCreator: 'Nathaniel Ribada',
+  //     recipeTD: '30 min | medium',
+  //     category: 'BREAKFAST'
+  //   }
+  // ];
 
   const [item, setRecipe] = useState('');
   const [itemCategory, setCategory] = useState('');
@@ -84,9 +137,6 @@ const ManageRecipe = () => {
     setCategory(itemCategory)
   }
 
-  const handlePress = () => {
-    return console.log("Testing")
-  }
   let [fontsLoaded] = useFonts({
     'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
     'Momcake-Thin': require('../../fonts/Momcake-Thin.otf'),
@@ -98,12 +148,18 @@ const ManageRecipe = () => {
     return null;
   }
   console.log(itemCategory)
+
+
+
     return (
-    <View style={styles.container}>
+      <ScrollView refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      } style={styles.container}>
+    <View >
       <View style={styles.header}>
       <Image style={styles.headinglogo} source={require('../../icons/heading.png')} />
       </View>
-      <ScrollView>
+      
         <View style={styles.body1}>
         <View style={styles.searchBar}>
         <Icon style={styles.searchIcon}
@@ -120,13 +176,13 @@ const ManageRecipe = () => {
             <Text style={styles.recipeTxt}>Manage Your Recipe</Text>
           </View>
           
-          <YourRecipefilter data={recipelist} input={item} setInput={setRecipe} onPress={() => handlePress()}/>
+          <YourRecipefilter data={recipelist} input={item} setInput={setRecipe}/>
         </View>
         
-      </ScrollView>
+   
         
     </View>
-    
+    </ScrollView>
     )
     
 }
