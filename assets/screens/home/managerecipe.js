@@ -13,10 +13,9 @@ const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
 const ManageRecipe = () => {
   const [recipelist, setRecipelist] = useState([]);
   // const [user_id, setUser_Id] = useState();
-  
+  AsyncStorage.getItem("user");
   // AsyncStorage.getItem("user").then((value) => setUser_Id(value));
   const [refreshing, setRefreshing] = useState(false);
-  user_id = "";
   useEffect(() => {
     fetchRecipe();
   }, []);

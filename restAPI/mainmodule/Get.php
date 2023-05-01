@@ -121,10 +121,10 @@ class Get{
 
         public function get_favorites_recipe($table, $condition = null){
             // 2-Confirm 1-Tentative 0-Cancel	
-            $sql = "SELECT bookmark.*, recipes.*, users.fullname FROM recipes JOIN users ON users.id = recipes.user_id JOIN bookmark ON recipes.id = bookmark.recipe_id GROUP BY bookmark.recipe_id";
+            $sql = "SELECT recipes.*, users.fullname FROM bookmark JOIN recipes ON bookmark.recipe_id = recipes.id JOIN users ON bookmark.user_id = users.id";
 
             if ($condition != null) {
-                $sql .= " HAVING {$condition}";
+                $sql .= " WHERE {$condition}";
             }
             $res = $this->gm->executeQuery($sql);
             if ($res['code'] == 200) {

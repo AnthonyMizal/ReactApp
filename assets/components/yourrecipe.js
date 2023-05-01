@@ -34,7 +34,7 @@ const YourRecipefilter = ({data, input, setInput}) => {
                         <Text style={styles.recipeTD}>{item.cooking_time}MIN | {item.difficulty}</Text>
                     </View>
                     <View style={styles.leftCont}>
-                        <DeleteButton/>
+                        <DeleteButton data={item.id}/>
                     </View>
                 </TouchableOpacity> )
             }

@@ -199,7 +199,7 @@ useEffect(() => {
           <View style={styles.recipeTxtCont}>
             <Text style={styles.recipeTxt}>RECIPES</Text>
           </View>
-          <Searchfilter data={recipelist} input={item} setInput={setRecipe} navigation={navigation} key={item.id}/>
+          <Searchfilter data={recipelist} input={item} setInput={setRecipe} navigation={navigation} key={recipelist.id}/>
         </View>
         
       </ScrollView>

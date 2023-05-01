@@ -1,20 +1,47 @@
-import { StatusBar } from 'expo-status-bar';
+import React, {useState, useEffect, useCallback} from 'react';
 import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
 import {COLORS} from '../../constants/colors';
-import { SvgXml } from 'react-native-svg';
 import {useFonts} from 'expo-font';
 import {ROUTES} from '../../constants/routes';
 import Category from '../../components/category';
 import Recipe from '../../components/recipe';
 import Icon from 'react-native-vector-icons/FontAwesome';
-const xml =`
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ffffff" fill-opacity="1" d="M0,224L80,186.7C160,149,320,75,480,80C640,85,800,171,960,192C1120,213,1280,171,1360,149.3L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
-`;
+import BookmarkFilter from '../../components/bookmarkedRecipe'
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
 
 
 
 const Bookmark = () => {
-  
+  const [recipelist, setRecipelist] = useState([]);
+
+  useEffect(() => {
+    fetchRecipe();
+  }, []);
+
+    const fetchRecipe = async () => {
+      user_id = await AsyncStorage.getItem("user");
+      
+      try {
+        const response = await axios.post(`${baseUrl}getFavoriteRecipes/${user_id}`, {
+          
+        });
+        if (response.status === 200 || refreshing === true) {
+          // alert(response.data.payload[0].cooking_time);
+          // console.log(response.data.payload[0]);
+          setRecipelist(response.data.payload);
+          console.log(response.data);
+
+        } else {
+          throw new Error("An error has occurred");
+        }
+      } catch (error) {
+
+      }
+    };
+
+
   let [fontsLoaded] = useFonts({
     'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
     'Momcake-Thin': require('../../fonts/Momcake-Thin.otf'),
@@ -25,7 +52,6 @@ const Bookmark = () => {
   if (!fontsLoaded) {
     return null;
   }
-
     return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -38,12 +64,7 @@ const Bookmark = () => {
             <Text style={styles.recipeTxt}>Your Bookmarks</Text>
           </View>
           
-          <Recipe 
-          recipeImg={require('../../sisig.jpg')} 
-          recipeTitle={'pork sisig'}
-          recipeCreator={'Jazmine Althe Isip'}
-          recipeTD={'30 min | medium'}
-          />
+          <BookmarkFilter data={recipelist} key={recipelist.id}/>
         </View>
       </ScrollView>
     </View>
