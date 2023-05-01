@@ -8,7 +8,7 @@ const BookmarkButton = (data) => {
   const [state, setState] = useState(false);
   // const [user_id, setUserID] = useState();
   AsyncStorage.getItem("user");
-  user_id = "";
+  // user_id = "";
   const recipe_id = data.data;
 
 

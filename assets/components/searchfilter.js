@@ -6,7 +6,7 @@ import {ROUTES} from '../constants/routes';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import BookmarkButton from './bookmarkBtn';
 import axios from 'axios';
-const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
+const baseUrl = 'http://192.168.18.43/PcookApp/';
 
 const Searchfilter = ({data, input, setInput, navigation}) => {
     // const [recipe_id, setRecipe_Id] = useState();
@@ -48,7 +48,7 @@ const Searchfilter = ({data, input, setInput, navigation}) => {
                return ( 
                 <TouchableOpacity style={styles.recipeCont} key={item.id} onPress={() => {navigation.navigate(ROUTES.RECIPE_DETAILS, item)}}>
                     <View style={styles.rightCont}>
-                        <Image style={styles.recipeImg} source={item.img_location} />
+                        <Image style={styles.recipeImg} source={{uri: baseUrl + item.img_location}} />
                     </View>
           
                     <View style={styles.middleCont}>

@@ -33,7 +33,7 @@ switch($_SERVER['REQUEST_METHOD']){
             // break;
 
             case 'addImagefile':
-                echo json_encode($get->file('recipes', $data, NULL));
+                echo json_encode($global->file('recipes', $data, NULL));
             break;
 
             case 'register':

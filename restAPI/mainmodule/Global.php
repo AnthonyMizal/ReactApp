@@ -93,11 +93,7 @@ class GlobalMethods {
 
 
         public function file($table, $data, $condition_string){
-            // so i got bored and copied the insert code..
-            // and changed some stuff..
-            // some arrays..
-            //try
-            // $profile_location = $data->profile_pic;
+
             $id = $_GET['id'];
             try{
                 
@@ -115,25 +111,17 @@ class GlobalMethods {
                  )
                     $name = date("Y-m-d").rand(100,999999999999).'.'.$extension;
                     // $location = '../uploads/'.$name;
-                    $location = '../images/userPfp/'.$name;
+                    $location = 'assets/recipeimages'.$name;
                     move_uploaded_file($_FILES['file']['tmp_name'], $location);
                     
                 }
-            //     $sql_str1 = "SELECT * FROM $table WHERE id = '$id'";
-                
-            //     // prepare sql stmts
-            //     $sql1 = $this->pdo->prepare($sql_str1);
-            //    // var_dump($sql);
-            //     // execute em..
-            //     $sql1->execute();
-                // unlink($location);
+
                
-                $sql_str = "UPDATE $table SET profile_picture = '$location' WHERE id = '$id'";
+                $sql_str = "UPDATE $table SET img_location = '$location' WHERE id = '$id'";
                 
                 // prepare sql stmts
                 $sql = $this->pdo->prepare($sql_str);
-               // var_dump($sql);
-                // execute em..
+
                 $sql->execute();
                 
                 
@@ -240,13 +228,13 @@ class GlobalMethods {
             if ($file["file"]["error"] > 0) {
             } else {
                 $filename = $file["file"]["name"];
-                $location = '../assets/recipeimages/' . $filename;
+                $location = 'assets/recipeimages/' . $filename;
                 if (file_exists($location)) {
                     unlink($location);
                 }
                 move_uploaded_file(
                     $file["file"]["tmp_name"],
-                    "../assets/recipeimages/" . $filename
+                    "assets/recipeimages/" . $filename
                 );
                 return $location;
             }
