@@ -16,12 +16,13 @@ const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
 const Home = ({navigation}) => {
   const [recipelist, setRecipelist] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState();
-  
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
 
 useEffect(() => {
     fetchRecipe();
   }, []);
+
 
 //   async function fetchUserData() {
 
@@ -53,50 +54,111 @@ useEffect(() => {
     }
   };
 
-  // const fetchLunch = async () => {
-    
-  //   try {
-  //     setSelectedCategory("Lunch")
-  //     const response = await axios.get(`${baseUrl}getFilteredRecipeDetails/${selectedCategory}`, {
+  const fetchLunch = async () => {
+    try {
+      
+      const response = await axios.get(`${baseUrl}getFilteredRecipeDetails/LUNCH`, {
         
-  //     });
-  //     if (response.status === 200 || refreshing === true) {
-  //       setRecipelist(response.data.payload);
-  //       console.log(response.data.payload)
+      });
+      if (response.status === 200 || refreshing === true) {
+        setRecipelist(response.data.payload);
+        console.log(response.data.payload)
 
-  //     } else {
-  //       throw new Error("An error has occurred");
-  //     }
-  //   } catch (error) {
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
 
-  //   }
-  // };
+    }
+  };
 
-  function fetchLunch() {
-    setSelectedCategory("Lunch")
-    console.log(selectedCategory)
-    axios.get(`${baseUrl}getFilteredRecipeDetails/${selectedCategory}`, {
-    }).then((response) =>
-    {
-      setRecipelist(response.data.payload);
-      console.log(response.data.payload)
-    }).catch(error => {
-      console.error(error);
-    });
-}
+  const fetchBreakfast = async () => {
+    try {
+      
+      const response = await axios.get(`${baseUrl}getFilteredRecipeDetails/BREAKFAST`, {
+        
+      });
+      if (response.status === 200 || refreshing === true) {
+        setRecipelist(response.data.payload);
+        console.log(response.data.payload)
 
-function fetchDessert() {
-  setSelectedCategory("Dessert")
-  console.log(selectedCategory)
-  axios.get(`${baseUrl}getFilteredRecipeDetails/${selectedCategory}`, {
-  }).then((response) =>
-  {
-    setRecipelist(response.data.payload);
-    console.log(response.data.payload)
-  }).catch(error => {
-    console.error(error);
-  });
-}
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+
+    }
+  };
+
+  const fetchDinner = async () => {
+    try {
+      
+      const response = await axios.get(`${baseUrl}getFilteredRecipeDetails/DINNER`, {
+        
+      });
+      if (response.status === 200 || refreshing === true) {
+        setRecipelist(response.data.payload);
+        console.log(response.data.payload)
+
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+
+    }
+  };
+
+
+  const fetchDessert= async () => {
+    try {
+      
+      const response = await axios.get(`${baseUrl}getFilteredRecipeDetails/DESSERT`, {
+        
+      });
+      if (response.status === 200 || refreshing === true) {
+        setRecipelist(response.data.payload);
+        console.log(response.data.payload)
+
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+
+    }
+  };
+
+// function fetchLunch() {
+    
+//     setSelectedCategory((selectedCategory) => (selectedCategory = "Lunch"));
+//     console.log(selectedCategory)
+//     axios.get(`${baseUrl}getFilteredRecipeDetails/${selectedCategory}`, {
+//     }).then((response) =>
+//     {
+//       setRecipelist(response.data.payload);
+//       setSelectedCategory("")
+//     }).catch(error => {
+//       console.error(error);
+//     });
+// }
+
+// function fetchDessert() {
+
+//   setSelectedCategory((selectedCategory) => (selectedCategory = "Dessert"));
+//   console.log(selectedCategory)
+//   axios.get(`${baseUrl}getFilteredRecipeDetails/${selectedCategory}`, {
+//   }).then((response) =>
+//   {
+//     setRecipelist(response.data.payload);
+//     setSelectedCategory("")
+//   }).catch(error => {
+//     console.error(error);
+//   });
+// }
+
+// useEffect(() => {
+//   console.log(selectedCategory)
+// }, [selectedCategory]);
+
   // const fetchDessert = async () => {
     
   //   try {
@@ -170,16 +232,16 @@ function fetchDessert() {
           <TouchableOpacity style={styles.categoryCont} onPress={fetchRecipe}>
             <Text style={styles.categoryText}>All</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.categoryCont} onPress={() => setSelectedCategory("Breakfast")}>
+          <TouchableOpacity style={styles.categoryCont} onPress={() => {fetchBreakfast()}}>
             <Text style={styles.categoryText}>Breakfast</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.categoryCont} onPress={fetchLunch}>
+          <TouchableOpacity style={styles.categoryCont} onPress={() => {fetchLunch()}}>
             <Text style={styles.categoryText}>Lunch</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.categoryCont} onPress={() => setSelectedCategory("Dinner")}>
+          <TouchableOpacity style={styles.categoryCont} onPress={() => {fetchDinner()}}>
             <Text style={styles.categoryText}>Dinner</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.categoryCont} onPress={fetchDessert}>
+          <TouchableOpacity style={styles.categoryCont} onPress={() => {fetchDessert()}}>
             <Text style={styles.categoryText}>Dessert</Text>
           </TouchableOpacity>
           

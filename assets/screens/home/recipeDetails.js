@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback, useRef} from 'react';
 
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView, FlatList} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView, Button} from 'react-native';
 import {COLORS} from '../../constants/colors';
-
+import YoutubePlayer from "react-native-youtube-iframe";
 import {useFonts} from 'expo-font';
 import {ROUTES} from '../../constants/routes';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -15,7 +15,13 @@ const baseUrl = 'http://192.168.18.43/PcookApp/';
 
 const RecipeDetails = ({navigation, route}) => {
   const recipeDetail = route.params;
-  console.log(recipeDetail);
+  function YouTubeGetID(url){
+    url = url.split(/(vi\/|v%3D|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+    return undefined !== url[2]?url[2].split(/[^0-9a-z_\-]/i)[0]:url[0];
+}
+
+ const ytUrl = YouTubeGetID(recipeDetail.video_link);
+ console.log(ytUrl);
   // const [recipedetails, setRecipeDetails] = useState([]);
 
   // useEffect(() => {
@@ -40,9 +46,14 @@ const RecipeDetails = ({navigation, route}) => {
   //   };
   //   fetchRecipe();
   // }, []);
+  const [playing, setPlaying] = useState(false);
 
-
-
+  const onStateChange = useCallback((state) => {
+    if (state === "ended") {
+      setPlaying(false);
+      alert("video has finished playing!");
+    }
+  }, []);
 
   let [fontsLoaded] = useFonts({
     'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
@@ -54,6 +65,7 @@ const RecipeDetails = ({navigation, route}) => {
   if (!fontsLoaded) {
     return null;
   }
+
 
     return (
     <View style={styles.container}>
@@ -80,8 +92,14 @@ const RecipeDetails = ({navigation, route}) => {
         
         <View style={styles.line}></View>
         <Text style={styles.text1}>By: {recipeDetail.fullname}</Text>
-
-
+        <View style={styles.ytPlayer}>
+                <YoutubePlayer
+                height={184}
+                play={playing}
+                videoId={ytUrl}
+                onChangeState={onStateChange}
+              />
+        </View>
         <View style={styles.inputWholeCont}>
           <View style={styles.textContWhole}>
               <Text style={styles.textLabel}>Cooking Time: </Text>
@@ -120,6 +138,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
+  },
+  ytPlayer:{
+    borderWidth: 7,
+    borderColor: COLORS.green,
+    borderRadius: 10,
+    marginTop: 10,
+    marginBottom: 10
   },
   header: {
     display: 'flex',
