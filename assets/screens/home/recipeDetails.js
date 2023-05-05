@@ -9,10 +9,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { ScrollView } from 'react-native-gesture-handler';
 
-
-const xml =`
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ffffff" fill-opacity="1" d="M0,224L80,186.7C160,149,320,75,480,80C640,85,800,171,960,192C1120,213,1280,171,1360,149.3L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
-`;
+const baseUrl = 'http://192.168.18.43/PcookApp/';
 
 
 
@@ -61,6 +58,7 @@ const RecipeDetails = ({navigation, route}) => {
     return (
     <View style={styles.container}>
       <View style={styles.header}>
+      <Image style={styles.recipeImg} source={{uri: baseUrl + recipeDetail.img_location}}/>
           <TouchableOpacity onPress={() => navigation.navigate(ROUTES.RECIPE_HOME)}>
             <Icon
                 name= 'arrow-left'
@@ -68,6 +66,7 @@ const RecipeDetails = ({navigation, route}) => {
                 color={'#31C84F'}
               />
           </TouchableOpacity>
+          
           <View style={styles.iconCont}>
             <Image style={styles.icon} source={require('../../addrecipe.png')} />
           </View>
@@ -78,10 +77,32 @@ const RecipeDetails = ({navigation, route}) => {
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.body}>
         <Text style={styles.text2}>{recipeDetail.name}</Text>
-        <View style={styles.line}></View>
         
-        <View style={styles.inputWholeCont}>
+        <View style={styles.line}></View>
+        <Text style={styles.text1}>By: {recipeDetail.fullname}</Text>
 
+
+        <View style={styles.inputWholeCont}>
+          <View style={styles.textContWhole}>
+              <Text style={styles.textLabel}>Cooking Time: </Text>
+              <Text style={styles.textLabelDetail}>{recipeDetail.cooking_time} min</Text>
+          </View>
+          <View style={styles.textContWhole}>
+              <Text style={styles.textLabel}>Difficulty: </Text>
+              <Text style={styles.textLabelDetail}>{recipeDetail.difficulty}</Text>
+          </View>
+          <View style={styles.textContWhole2}>
+              <Text style={styles.textLabel2}>Ingredients: </Text>
+              <Text style={styles.textLabelDetail2}>{recipeDetail.ingredients}</Text>
+          </View>
+          <View style={styles.textContWhole2}>
+              <Text style={styles.textLabel2}>Directions: </Text>
+              <View style={styles.textLabelDetailCont}>
+                <Text style={styles.textLabelDetail2}>{recipeDetail.directions}</Text>
+              </View>
+              
+          </View>
+        
         
         
 
@@ -95,6 +116,7 @@ const RecipeDetails = ({navigation, route}) => {
 }
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
@@ -108,6 +130,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     backgroundColor: COLORS.background,
   },
+  recipeImg: {
+    width: 410,
+    height: 110,
+    margin: 0,
+    position: 'absolute'
+},
   doneText: {
     color: COLORS.green,
     fontFamily: 'Momcake-Bold',
@@ -134,8 +162,46 @@ const styles = StyleSheet.create({
     fontSize: 30,
     alignSelf: 'center',
     color: COLORS.green
+  },
+  textLabel:{
+    fontFamily: 'Momcake-Bold',
+    color: COLORS.green,
+    fontSize: 20,
+  },
+  textLabel2:{
+    fontFamily: 'Momcake-Bold',
+    color: COLORS.green,
+    fontSize: 20,
+    marginBottom: 10
+  },
+  textContWhole:{
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  textContWhole2:{
 
   },
+  text1: {
+    fontFamily: 'CL-Reg',
+    fontSize: 20,
+    alignSelf: 'center',
+    color: COLORS.black
+  },
+  textLabelDetail:{
+    fontFamily: 'CL-Reg',
+    fontSize: 17,
+    color: COLORS.black
+  },
+  textLabelDetail2:{
+    fontFamily: 'CL-Reg',
+    fontSize: 17,
+    color: COLORS.black,
+  },
+  // textLabelDetailCont:{
+  //   display: 'flex',
+  //   justifyContent: 'center',
+  //   alignItems:'center',
+  // },
   input: {
     backgroundColor: COLORS.placeholderBG,
     padding: 10,
@@ -173,7 +239,9 @@ const styles = StyleSheet.create({
   },
   inputWholeCont: {
     gap: 15,
-    flex: 1
+    flex: 1,
+    padding: 20,
+    paddingBottom: 100
   },
   uploadCont: {
     display: 'flex',

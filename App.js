@@ -20,8 +20,11 @@ export default function App() {
   }
 
     return (
+      
     <NavigationContainer>
+      <StatusBar translucent={true}></StatusBar>
       <AuthNavigator/>
+      
     </NavigationContainer>
     )
 }

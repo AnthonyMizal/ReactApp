@@ -5,6 +5,7 @@ import {useFonts} from 'expo-font';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Searchfilter from '../../components/searchfilter';
 import Categoryfilter from '../../components/categoryFilter';
+import Category from '../../components/category';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
@@ -15,46 +16,34 @@ const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
 const Home = ({navigation}) => {
   const [recipelist, setRecipelist] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-
+  const [selectedCategory, setSelectedCategory] = useState();
   
 
 useEffect(() => {
-
-    const fetchRecipe = async () => {
-      try {
-        const response = await axios.post(`${baseUrl}getRecipeDetails`, {
-          
-        });
-        if (response.status === 200 || refreshing === true) {
-          // alert(response.data.payload[0].cooking_time);
-          // console.log(response.data.payload[0]);
-          setRecipelist(response.data.payload);
-          // console.log(response.data.payload.id);
-
-        } else {
-          throw new Error("An error has occurred");
-        }
-      } catch (error) {
-
-      }
-    };
     fetchRecipe();
   }, []);
 
+//   async function fetchUserData() {
 
+//     axios.get(`${baseUrl}fetchuser/${name}`, {
+//     }).then((response) =>
+//     {
+//       console.log(response.data);
+//     }).catch(error => {
+//       console.error(error);
+//     });
+// }
 
 
 
   const fetchRecipe = async () => {
     try {
-      const response = await axios.post(`${baseUrl}getRecipeDetails`, {
+      const response = await axios.get(`${baseUrl}getRecipeDetails`, {
         
       });
       if (response.status === 200 || refreshing === true) {
-        // alert(response.data.payload[0].cooking_time);
-        // console.log(response.data.payload[0]);
         setRecipelist(response.data.payload);
-        // console.log(response.data.payload)
+        console.log(response.data.payload)
 
       } else {
         throw new Error("An error has occurred");
@@ -64,81 +53,82 @@ useEffect(() => {
     }
   };
 
+  // const fetchLunch = async () => {
+    
+  //   try {
+  //     setSelectedCategory("Lunch")
+  //     const response = await axios.get(`${baseUrl}getFilteredRecipeDetails/${selectedCategory}`, {
+        
+  //     });
+  //     if (response.status === 200 || refreshing === true) {
+  //       setRecipelist(response.data.payload);
+  //       console.log(response.data.payload)
+
+  //     } else {
+  //       throw new Error("An error has occurred");
+  //     }
+  //   } catch (error) {
+
+  //   }
+  // };
+
+  function fetchLunch() {
+    setSelectedCategory("Lunch")
+    console.log(selectedCategory)
+    axios.get(`${baseUrl}getFilteredRecipeDetails/${selectedCategory}`, {
+    }).then((response) =>
+    {
+      setRecipelist(response.data.payload);
+      console.log(response.data.payload)
+    }).catch(error => {
+      console.error(error);
+    });
+}
+
+function fetchDessert() {
+  setSelectedCategory("Dessert")
+  console.log(selectedCategory)
+  axios.get(`${baseUrl}getFilteredRecipeDetails/${selectedCategory}`, {
+  }).then((response) =>
+  {
+    setRecipelist(response.data.payload);
+    console.log(response.data.payload)
+  }).catch(error => {
+    console.error(error);
+  });
+}
+  // const fetchDessert = async () => {
+    
+  //   try {
+  //     setSelectedCategory("Dessert")
+  //     const response = await axios.get(`${baseUrl}getFilteredRecipeDetails/${selectedCategory}`, {
+        
+  //     });
+  //     if (response.status === 200 || refreshing === true) {
+  //       setRecipelist(response.data.payload);
+  //       console.log(response.data.payload)
+
+  //     } else {
+  //       throw new Error("An error has occurred");
+  //     }
+  //   } catch (error) {
+
+  //   }
+  // };
+
   const onRefresh = useCallback(() => {
     fetchRecipe();
     setRefreshing(true);
+    console.log(selectedCategory)
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
   }, []);
 
-  const categories = [
-    {
-      id: '1',
-      category: 'All',
-    },
-    {
-      id: '2',
-      category: 'Breakfast',
-    },
-    {
-      id: '3',
-      category: 'Lunch',
-    },
-    {
-      id: '4',
-      category: 'Dinner',
-    },
-    {
-      id: '5',
-      category: 'Dessert',
-    },
-  ]
-
-
-  // const recipelist = [
-  //   {
-  //     id: '1',
-  //     recipeImg: require('../../sisig.jpg'),
-  //     recipeTitle: 'pork sisig',
-  //     recipeCreator: 'Jazmine Althea Isip',
-  //     recipeTD: '30 min | medium',
-  //     category: 'LUNCH'
-  //   },
-  //   {
-  //     id: '2',
-  //     recipeImg: require('../../crispypata.jpg'),
-  //     recipeTitle: 'Crispy Pata',
-  //     recipeCreator: 'Kim Padua',
-  //     recipeTD: '30 min | easy',
-  //     category: 'DINNER'
-  //   },
-  //   {
-  //     id: '3',
-  //     recipeImg: require('../../kaldereta.jpg'),
-  //     recipeTitle: 'kaldereta',
-  //     recipeCreator: 'Jasper Mamaril',
-  //     recipeTD: '30 min | hard',
-  //     category: 'DINNER'
-  //   },
-  //   {
-  //     id: '4',
-  //     recipeImg: require('../../adobo.jpg'),
-  //     recipeTitle: 'Adobo',
-  //     recipeCreator: 'Nathaniel Ribada',
-  //     recipeTD: '30 min | medium',
-  //     category: 'BREAKFAST'
-  //   }
-  // ];
-
-
-
 
   const [item, setRecipe] = useState('');
   const [itemCategory, setCategory] = useState('');
-  const setCategoryFilter = itemCategory => {
-    setCategory(itemCategory)
-  }
+
 
 
   let [fontsLoaded] = useFonts({
@@ -151,10 +141,6 @@ useEffect(() => {
   if (!fontsLoaded) {
     return null;
   }
-
-
-
-
 
 
     return (
@@ -180,16 +166,22 @@ useEffect(() => {
         </View>
         <View style={styles.categoryWrapper}>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          {/* <Category category="Breakfast"/>
-          <Category category="Lunch"/>
-          <Category category="Dinner"/>
-          <Category category="Dessert"/>
-          <Category category="Dessert"/> */}
-          {categories.map(e => (
-            <Categoryfilter data={categories} input={itemCategory} key={categories.id}/>
-          ))
-          
-          }
+
+          <TouchableOpacity style={styles.categoryCont} onPress={fetchRecipe}>
+            <Text style={styles.categoryText}>All</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.categoryCont} onPress={() => setSelectedCategory("Breakfast")}>
+            <Text style={styles.categoryText}>Breakfast</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.categoryCont} onPress={fetchLunch}>
+            <Text style={styles.categoryText}>Lunch</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.categoryCont} onPress={() => setSelectedCategory("Dinner")}>
+            <Text style={styles.categoryText}>Dinner</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.categoryCont} onPress={fetchDessert}>
+            <Text style={styles.categoryText}>Dessert</Text>
+          </TouchableOpacity>
           
           </ScrollView>
           
@@ -276,7 +268,22 @@ const styles = StyleSheet.create({
   recipeTxt: {
     fontSize: 22,
     fontFamily: 'CL-Bold'
-  }
+  },
+  categoryCont: {
+    borderWidth: 3,
+    borderColor: COLORS.green,
+    padding: 12,
+    width: 100,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 30,
+    margin: 5
+},
+categoryText: {
+    color: COLORS.green,
+    fontFamily: 'Momcake-Bold',
+},
 
 });
 

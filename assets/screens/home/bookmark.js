@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Image, RefreshControl } from 'react-native';
 import {COLORS} from '../../constants/colors';
 import {useFonts} from 'expo-font';
 import {ROUTES} from '../../constants/routes';
@@ -15,7 +15,7 @@ const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
 
 const Bookmark = () => {
   const [recipelist, setRecipelist] = useState([]);
-
+  const [refreshing, setRefreshing] = useState(false);
   useEffect(() => {
     fetchRecipe();
   }, []);
@@ -24,7 +24,7 @@ const Bookmark = () => {
       user_id = await AsyncStorage.getItem("user");
       
       try {
-        const response = await axios.post(`${baseUrl}getFavoriteRecipes/${user_id}`, {
+        const response = await axios.get(`${baseUrl}getFavoriteRecipes/${user_id}`, {
           
         });
         if (response.status === 200 || refreshing === true) {
@@ -41,6 +41,13 @@ const Bookmark = () => {
       }
     };
 
+    const onRefresh = useCallback(() => {
+      fetchRecipe();
+      setRefreshing(true);
+      setTimeout(() => {
+        setRefreshing(false);
+      }, 2000);
+    }, []);
 
   let [fontsLoaded] = useFonts({
     'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
@@ -53,7 +60,10 @@ const Bookmark = () => {
     return null;
   }
     return (
-    <View style={styles.container}>
+    <ScrollView refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    } style={styles.container} > 
+    <View >
       <View style={styles.header}>
       <Image style={styles.headinglogo} source={require('../../icons/heading.png')} />
       </View>
@@ -68,6 +78,7 @@ const Bookmark = () => {
         </View>
       </ScrollView>
     </View>
+    </ScrollView>
     )
 }
 

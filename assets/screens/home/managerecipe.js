@@ -23,7 +23,7 @@ const ManageRecipe = () => {
   const fetchRecipe = async () => {
     user_id = await AsyncStorage.getItem("user");
     try {
-      const response = await axios.post(`${baseUrl}getRecipeDetails/${user_id}`, {
+      const response = await axios.get(`${baseUrl}getRecipeDetails/${user_id}`, {
       });
       if (response.status === 200) {
         // alert(response.data.payload[0].cooking_time);

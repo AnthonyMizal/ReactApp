@@ -49,14 +49,6 @@ switch($_SERVER['REQUEST_METHOD']){
                 echo json_encode($global->insert("recipes",$data));
             break;
                 
-            case 'getRecipeDetails':
-                if(count($req)>1){
-                    echo json_encode($get->get_recipe('recipes', "user_id = '$req[1]'"));
-                }
-                else{
-                    echo json_encode($get->get_recipe('recipes'));
-                }   
-            break;
 
             case 'viewRecipeDetails':
                 if(count($req)>1){
@@ -89,11 +81,7 @@ switch($_SERVER['REQUEST_METHOD']){
                 }
                 break;
 
-            case 'getFavoriteRecipes':
-                if(count($req)>1){
-                    echo json_encode($get->get_favorites_recipe('bookmark', "bookmark.user_id = '$req[1]'"));
-                }
-            break;
+
 
             case 'updateProfile':
                 echo json_encode($global->update('users', $data, NULL));
@@ -132,17 +120,47 @@ switch($_SERVER['REQUEST_METHOD']){
         }
     break;
     
-        case 'PUT':
-            $data = json_decode(file_get_contents("php://input"));
-            switch($req[0]){
-                 // update customer profile request
-                    
+            case 'PUT':
+                $data = json_decode(file_get_contents("php://input"));
+                switch($req[0]){
+                    // update customer profile request
+                        
 
-                    default:
-                        echo "request not found";
+                        default:
+                            echo "request not found";
+                        break;
+                }
+            break;
+
+            case 'GET':
+                $data = json_decode(file_get_contents("php://input"));
+                switch($req[0]){
+                    // update customer profile request
+                        
+                    case 'getRecipeDetails':
+                        if(count($req)>1){
+                            echo json_encode($get->get_recipe('recipes', "user_id = '$req[1]'"));
+                        }
+                        else{
+                            echo json_encode($get->get_recipe('recipes'));
+                        }   
                     break;
-            }
-        break;
+
+                    case 'getFilteredRecipeDetails':
+                            echo json_encode($get->get_recipe('recipes', "category = '$req[1]'"));
+                    break;
+
+                    case 'getFavoriteRecipes':
+                        if(count($req)>1){
+                            echo json_encode($get->get_favorites_recipe('bookmark', "bookmark.user_id = '$req[1]'"));
+                        }
+                    break;
+        
+                        default:
+                            echo "request not found";
+                        break;
+                }
+            break;
 
     default:
         echo "failed request";

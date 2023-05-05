@@ -1,21 +1,24 @@
-import React, {useRef} from 'react';
-import { StatusBar } from 'expo-status-bar';
+import React, {useState, useEffect,} from 'react';
 import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
 import {COLORS} from '../../constants/colors';
-import { SvgXml } from 'react-native-svg';
 import {useFonts} from 'expo-font';
-import {ROUTES} from '../../constants/routes';
-import Category from '../../components/category';
-import Recipe from '../../components/recipe';
 import Icon from 'react-native-vector-icons/FontAwesome';
-const xml =`
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ffffff" fill-opacity="1" d="M0,224L80,186.7C160,149,320,75,480,80C640,85,800,171,960,192C1120,213,1280,171,1360,149.3L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
-`;
+import Searchfilter from '../../components/searchfilter';
+import axios from 'axios';
+const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
 
 
 
-const Search = () => {
-  
+const Search = ({navigation}) => {
+
+
+  const [recipelist, setRecipelist] = useState([]);
+  const [item, setRecipe] = useState('');
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
   let [fontsLoaded] = useFonts({
     'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
     'Momcake-Thin': require('../../fonts/Momcake-Thin.otf'),
@@ -26,6 +29,39 @@ const Search = () => {
   if (!fontsLoaded) {
     return null;
   }
+
+    async function fetchUserData() {
+
+    axios.get(`${baseUrl}getRecipeDetails`, {
+    }).then((response) =>
+    {
+      setRecipelist(response.data.payload);
+      console.log(response.data.payload)
+    }).catch(error => {
+      console.error(error);
+    });
+}
+
+  // const fetchSearchRecipe = async () => {
+  //   try {
+  //     const response = await axios.get(`${baseUrl}getRecipeDetails`, {
+        
+  //     });
+  //     if (response.status === 200 || refreshing === true) {
+  //       // alert(response.data.payload[0].cooking_time);
+  //       // console.log(response.data.payload[0]);
+  //       setRecipelist(response.data.payload);
+  //       console.log(response.data.payload)
+
+  //     } else {
+  //       throw new Error("An error has occurred");
+  //     }
+  //   } catch (error) {
+
+  //   }
+  // };
+
+
     return (
       
     <View style={styles.container}>
@@ -41,9 +77,9 @@ const Search = () => {
               name="search"
               size={20}
               color={COLORS.gray}/>
-          <TextInput style={styles.input} placeholder='Find Recipe' autoFocus={true}/>
+          <TextInput style={styles.input} placeholder='Find Recipe' autoFocus={true} value={item} onChangeText={text => setRecipe(text) }/>
         </View>
-        
+          <Searchfilter data={recipelist} input={item} setInput={setRecipe} navigation={navigation} key={recipelist.id}/>
         </View>
       
       </ScrollView>
@@ -97,7 +133,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: COLORS.placeholderBG,
     borderRadius: 30,
-    marginTop: 20
+    marginTop: 20,
+    marginBottom: 30
   },
   searchIcon: {
     padding: 10
