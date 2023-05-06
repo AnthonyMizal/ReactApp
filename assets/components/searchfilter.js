@@ -34,7 +34,7 @@ const Searchfilter = ({data, input, setInput, navigation}) => {
                     <View style={styles.middleCont}>
                         <Text style={styles.recipeTitle}>{item.name}</Text>
                         <Text style={styles.recipeCreator}>by {item.fullname}</Text>
-                        <Text style={styles.recipeTD}>{item.cooking_time} | {item.difficulty}</Text>
+                        <Text style={styles.recipeTD}>{item.cooking_time} MIN | {item.difficulty}</Text>
                     </View>
                     <View style={styles.leftCont}>
                         <BookmarkButton data={item.id}/>
@@ -45,7 +45,7 @@ const Searchfilter = ({data, input, setInput, navigation}) => {
                 return ( 
                  <TouchableOpacity style={styles.recipeCont} key={item.id} onPress={() => navigation.navigate(ROUTES.RECIPE_DETAILS, item)}> 
                      <View style={styles.rightCont}>
-                         <Image style={styles.recipeImg} source={item.img_location}/>
+                         <Image style={styles.recipeImg} source={{uri: baseUrl + item.img_location}}/>
                      </View>
                      <View style={styles.middleCont}>
                          <Text style={styles.recipeTitle}>{item.name}</Text>

@@ -32,9 +32,26 @@ switch($_SERVER['REQUEST_METHOD']){
             //     echo json_encode($auth->uploadimage($data));
             // break;
 
+            // case 'addShowroom':
+            //     echo json_encode($get->addShowroom("posts", $data));
+            //     break;\
+        
+            case 'addRecipeWithPic':
+                echo json_encode($get->addRecipeWithPic("recipes", $data));
+                break;
+
             case 'addImagefile':
-                echo json_encode($global->file('recipes', $data, NULL));
-            break;
+                // if (count($req) > 1) {
+                echo json_encode($get->file('recipes', $data, "WHERE id = '$req[1]'"));
+                // }
+                break;
+
+
+            // case 'addImagefile':
+            //     if(count($req)>1){
+            //         echo json_encode($get->file('recipes', $data, "id = '$req[1]'"));
+            //     }
+            // break;
 
             case 'register':
                 echo json_encode($auth->register($data));
@@ -48,7 +65,8 @@ switch($_SERVER['REQUEST_METHOD']){
             case 'createrecipe':
                 echo json_encode($global->insert("recipes",$data));
             break;
-                
+            
+            
 
             case 'viewRecipeDetails':
                 if(count($req)>1){
@@ -144,6 +162,10 @@ switch($_SERVER['REQUEST_METHOD']){
                         else{
                             echo json_encode($get->get_recipe('recipes'));
                         }   
+                    break;
+
+                    case 'getcreatedrecipe':
+                        echo json_encode($get->get_created_recipe("recipes",$data));
                     break;
 
                     case 'getFilteredRecipeDetails':

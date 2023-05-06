@@ -49,28 +49,6 @@ const ManageRecipe = () => {
 
 
 
-  const categories = [
-    {
-      id: '1',
-      category: 'All',
-    },
-    {
-      id: '2',
-      category: 'Breakfast',
-    },
-    {
-      id: '3',
-      category: 'Lunch',
-    },
-    {
-      id: '4',
-      category: 'Dinner',
-    },
-    {
-      id: '5',
-      category: 'Dessert',
-    },
-  ]
 
 
   // const recipelist = [

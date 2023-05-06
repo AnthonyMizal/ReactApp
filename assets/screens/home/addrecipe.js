@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView, Button} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView,Platform, Button} from 'react-native';
 import {COLORS} from '../../constants/colors';
 import {useFonts} from 'expo-font';
 import {ROUTES} from '../../constants/routes';
@@ -8,12 +8,16 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SelectDropdown from 'react-native-select-dropdown';
 import { ScrollView } from 'react-native-gesture-handler';
+import { AntDesign } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import * as DocumentPicker from 'expo-document-picker';
 // import Recipe from '../../components/recipe';
 import UploadImage from '../../components/uploadImage';
 // import ImagePicker from 'react-native-image-crop-picker';
 const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
+
 
 
 const difficulty_picker = ["EASY", "MEDIUM", "HARD"];
@@ -38,15 +42,17 @@ const category_picker = ["BREAKFAST", "LUNCH", "DINNER", "DESSERT"];
 
 
 const Addrecipe = ({navigation}) => {
-  // const [photo, setPhoto] = useState(null);
   const [user_id, setUser_Id] = useState("");
+  const [image, setImagePath] = useState(null);
   const [name, setName] = useState("");
   const [video_link, setVidLink] = useState("");
-  const [cooking_time, setTime] = useState();
-  const [difficulty, setDifficulty] = useState();
-  const [category, setCategory] = useState();
-  const [ingredients, setIngredients] = useState();
-  const [directions, setDirections] = useState();
+  const [cooking_time, setTime] = useState("");
+  const [difficulty, setDifficulty] = useState("");
+  const [category, setCategory] = useState("");
+  const [ingredients, setIngredients] = useState("");
+  const [directions, setDirections] = useState("");
+  const data = new FormData();
+  AsyncStorage.getItem("user").then((value) => setUser_Id(value));
   let [fontsLoaded] = useFonts({
     'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
     'Momcake-Thin': require('../../fonts/Momcake-Thin.otf'),
@@ -58,9 +64,25 @@ const Addrecipe = ({navigation}) => {
     return null;
   }
   
-  const onChangeimgHandler = (img_location) => {
-    setLocation(img_location);
+  _pickDocument = async () => {
+    let result = await DocumentPicker.getDocumentAsync({});
+
+    setImagePath(result.uri);
+    // console.log(result);
+
+    data.append("file", {
+      name: result.name,
+      type: result.mimeType,
+      uri: result.uri,
+    });
+
+    axios.post(`${baseUrl}addImagefile`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   };
+
 
   const onChangeNameHandler = (name) => {
     setName(name);
@@ -74,14 +96,6 @@ const Addrecipe = ({navigation}) => {
     setTime(cooking_time);
   };
 
-  // const onChangeDifficultyHandler = (difficulty) => {
-  //   setDifficulty(difficulty);
-  // };
-
-  // const onChangeCategoryHandler = (category) => {
-  //   setCategory(category);
-  // };
-
   const onChangeIngredientsHandler = (ingredients) => {
     setIngredients(ingredients);
   };
@@ -90,41 +104,87 @@ const Addrecipe = ({navigation}) => {
     setDirections(directions);
   };
 
-  AsyncStorage.getItem("user").then((value) => setUser_Id(value));
+  const addRecipe = async () => {
 
-  const onSubmitFormHandler = async (event) => {
-    // if (!fullname.trim() || !email.trim() || !username.trim() || !password.trim()) {
-    //   alert("Name or Email is invalid");
-    //   return;
-    // }
-
-    
-    try {
-      const response = await axios.post(`${baseUrl}createrecipe`, {
-        // img_location,
+    if (image) {
+      try {
+        console.log(name, user_id, video_link, cooking_time, difficulty, category, ingredients, directions)
+        const response = await axios.post(`${baseUrl}addRecipeWithPic`, {
         user_id,
         name,
         video_link,
         cooking_time,
-        difficulty,
+        difficulty, 
         category,
         ingredients,
-        directions
+        directions,
+        });
+        if (response.status === 200) {
+          // setState(true);
+          // alert(response.data.payload.id);
+          if (image) {
+            // saveImageDB(response.data.payload.id);
+            alert("meron picture");
+          } else {
+            alert("walang laman si data");
+          }
+        } else {
+          // setState(false);
+          alert("d nagsave");
+          throw new Error("An error has occurred");
+        }
+      } catch (error) {
+        alert("Invalid Username or Email!");
       }
-      
-      );
-      if (response.status === 200) {
-        alert(` You have succesfully created an account!`);
-        return navigation.navigate(ROUTES.HOME);
+    } else {
+      try {
+        const response = await axios.post(`${baseUrl}createrecipe`, {
+          // img_location,
+          user_id,
+          name,
+          video_link,
+          cooking_time,
+          difficulty, 
+          category,
+          ingredients,
+          directions
+        }
         
-      } else {
-        throw new Error("An error has occurred");
+        );
+        if (response.status === 200) {
+          if (image) {
+            // saveImageDB(response.data.payload.id);
+            alert("meron picture");
+          } else {
+            alert("walang laman si data");
+          }
+          return navigation.navigate(ROUTES.RECIPE_HOME);
+        } else {
+          // setState(false);
+          alert("d nagsave");
+          throw new Error("An error has occurred");
+        }
+      } catch (error) {
+        alert("Invalid Username or Email!");
       }
-    } catch (error) {
-      alert(error);
     }
   };
 
+  // const createFormData = (_image, body = {}) => {
+  //   const data = new FormData();
+  
+  //   data.append('photo', {
+  //     name: photo.fileName,
+  //     type: photo.type,
+  //     uri: Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri,
+  //   });
+  
+  //   Object.keys(body).forEach((key) => {
+  //     data.append(key, body[key]);
+  //   });
+  
+  //   return data;
+  // };
 
   // const addImage = () => {
   //   let image = ImagePicker.openPicker({
@@ -145,9 +205,11 @@ const Addrecipe = ({navigation}) => {
   //   });
   // };
 
+
+
     return (
     <View style={styles.container}>
-      
+     
       <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.navigate(ROUTES.RECIPE_HOME)}>
             <Icon
@@ -157,13 +219,15 @@ const Addrecipe = ({navigation}) => {
               />
             
           </TouchableOpacity>
+   
           <View style={styles.iconCont}>
             <Image style={styles.icon} source={require('../../addrecipe.png')} />
           </View>
-          <TouchableOpacity onPress={onSubmitFormHandler}>
+          <TouchableOpacity onPress={() => addRecipe()}>
             <Text style={styles.doneText}>SAVE</Text>
           </TouchableOpacity>
       </View>
+
       <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}>
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -179,7 +243,18 @@ const Addrecipe = ({navigation}) => {
           </TouchableOpacity>
         </View> */}
         {/* <Button title="Choose Photo" onPress={handleChoosePhoto} /> */}
-        <UploadImage/>
+        <View style={imageUploaderStyles.container}>
+                {
+                    image  && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
+                }
+                    <View style={imageUploaderStyles.uploadBtnContainer}>
+                        <TouchableOpacity onPress={_pickDocument} style={imageUploaderStyles.uploadBtn} >
+                            <Text>{image? 'Edit' : 'Upload'} Image</Text>
+                            <AntDesign name="camera" size={20} color="black" />
+                        </TouchableOpacity>
+                        
+                    </View>
+            </View>
         <View>
           <Text style={styles.textInput}>Name of recipe:</Text>
           <TextInput  style={styles.input} placeholder='Type here the name of the recipe...' value={name} onChangeText={onChangeNameHandler}/>
@@ -267,6 +342,32 @@ const Addrecipe = ({navigation}) => {
     </View>
     )
 }
+
+const imageUploaderStyles=StyleSheet.create({
+  container:{
+      elevation:2,
+      height:200,
+      width:200,
+      backgroundColor:'#efefef',
+      position:'relative',
+      overflow:'hidden',
+      alignSelf: 'center'
+  },
+  uploadBtnContainer:{
+      opacity:0.7,
+      position:'absolute',
+      right:0,
+      bottom:0,
+      backgroundColor:'lightgrey',
+      width:'100%',
+      height:'25%',
+  },
+  uploadBtn:{
+      display:'flex',
+      alignItems:"center",
+      justifyContent:'center'
+  }
+})
 
 const styles = StyleSheet.create({
   container: {
