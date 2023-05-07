@@ -42,15 +42,15 @@ const category_picker = ["BREAKFAST", "LUNCH", "DINNER", "DESSERT"];
 
 
 const Addrecipe = ({navigation}) => {
-  const [user_id, setUser_Id] = useState("");
+  const [user_id, setUser_Id] = useState();
   const [image, setImagePath] = useState(null);
-  const [name, setName] = useState("");
-  const [video_link, setVidLink] = useState("");
-  const [cooking_time, setTime] = useState("");
-  const [difficulty, setDifficulty] = useState("");
-  const [category, setCategory] = useState("");
-  const [ingredients, setIngredients] = useState("");
-  const [directions, setDirections] = useState("");
+  const [name, setName] = useState();
+  const [video_link, setVidLink] = useState();
+  const [cooking_time, setTime] = useState();
+  const [difficulty, setDifficulty] = useState();
+  const [category, setCategory] = useState();
+  const [ingredients, setIngredients] = useState();
+  const [directions, setDirections] = useState();
   const data = new FormData();
   AsyncStorage.getItem("user").then((value) => setUser_Id(value));
   let [fontsLoaded] = useFonts({
@@ -110,14 +110,14 @@ const Addrecipe = ({navigation}) => {
       try {
         console.log(name, user_id, video_link, cooking_time, difficulty, category, ingredients, directions)
         const response = await axios.post(`${baseUrl}addRecipeWithPic`, {
-        user_id,
-        name,
-        video_link,
-        cooking_time,
-        difficulty, 
-        category,
-        ingredients,
-        directions,
+        user_id:user_id,
+        name:name,
+        video_link:video_link,
+        cooking_time:cooking_time,
+        difficulty:difficulty, 
+        category:category,
+        ingredients:ingredients,
+        directions:directions,
         });
         if (response.status === 200) {
           // setState(true);
