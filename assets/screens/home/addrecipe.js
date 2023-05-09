@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView,Platform, Button} from 'react-native';
+import { StyleSheet, Text, View, Image,ToastAndroid, TouchableOpacity, TextInput, KeyboardAvoidingView,Platform, Button} from 'react-native';
 import {COLORS} from '../../constants/colors';
 import {useFonts} from 'expo-font';
 import {ROUTES} from '../../constants/routes';
@@ -121,15 +121,17 @@ const Addrecipe = ({navigation}) => {
         });
         if (response.status === 200) {
           if (image) {
-            alert("Succesfully Added a Recipe!");
+            ToastAndroid.show('Succesfully added a recipe!', ToastAndroid.SHORT);
           } else {
+            ToastAndroid.show('Succesfully added a recipe!', ToastAndroid.SHORT);
           }
+          return navigation.navigate(ROUTES.RECIPE_HOME);
         } else {
 
           throw new Error("An error has occurred");
         }
       } catch (error) {
-        alert("Invalid Username or Email!");
+        alert("Invalid");
       }
     } else {
       try {
@@ -148,9 +150,9 @@ const Addrecipe = ({navigation}) => {
         );
         if (response.status === 200) {
           if (image) {
-            alert("Succesfully Added a Recipe!");
+            ToastAndroid.show('Succesfully added a recipe!', ToastAndroid.SHORT);
           } else {
-            alert("Succesfully Added a Recipe!");
+            ToastAndroid.show('Succesfully added a recipe!', ToastAndroid.SHORT);
           }
           return navigation.navigate(ROUTES.RECIPE_HOME);
         } else {

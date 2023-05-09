@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView, Button } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Image,ToastAndroid, TouchableOpacity, TextInput, KeyboardAvoidingView, Button } from 'react-native';
 import {COLORS} from '../../constants/colors';
 import { SvgXml } from 'react-native-svg';
 import {useFonts} from 'expo-font';
@@ -61,7 +61,7 @@ const Signup = (props) =>  {
         password
       });
       if (response.status === 200) {
-        alert(` You have succesfully created an account!`);
+        ToastAndroid.show('Succesfully created an account!', ToastAndroid.SHORT);
         setFullname('');
         setEmail('');
         setUsername('');

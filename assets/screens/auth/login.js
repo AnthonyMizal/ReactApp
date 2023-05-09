@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, ToastAndroid, TextInput, KeyboardAvoidingView, ScrollView } from 'react-native';
 import {COLORS} from '../../constants/colors';
 import { SvgXml } from 'react-native-svg';
 import {useFonts} from 'expo-font';
@@ -47,6 +47,7 @@ const Login = (props) => {
         password
       });
       if (response.status === 200) {
+        ToastAndroid.show('Succesfully Logged In!', ToastAndroid.SHORT);
         // console.log(response.data.payload.id);
         setUsername('');
         setPassword('');
