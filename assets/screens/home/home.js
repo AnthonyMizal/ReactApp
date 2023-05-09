@@ -127,56 +127,7 @@ useEffect(() => {
     }
   };
 
-// function fetchLunch() {
-    
-//     setSelectedCategory((selectedCategory) => (selectedCategory = "Lunch"));
-//     console.log(selectedCategory)
-//     axios.get(`${baseUrl}getFilteredRecipeDetails/${selectedCategory}`, {
-//     }).then((response) =>
-//     {
-//       setRecipelist(response.data.payload);
-//       setSelectedCategory("")
-//     }).catch(error => {
-//       console.error(error);
-//     });
-// }
 
-// function fetchDessert() {
-
-//   setSelectedCategory((selectedCategory) => (selectedCategory = "Dessert"));
-//   console.log(selectedCategory)
-//   axios.get(`${baseUrl}getFilteredRecipeDetails/${selectedCategory}`, {
-//   }).then((response) =>
-//   {
-//     setRecipelist(response.data.payload);
-//     setSelectedCategory("")
-//   }).catch(error => {
-//     console.error(error);
-//   });
-// }
-
-// useEffect(() => {
-//   console.log(selectedCategory)
-// }, [selectedCategory]);
-
-  // const fetchDessert = async () => {
-    
-  //   try {
-  //     setSelectedCategory("Dessert")
-  //     const response = await axios.get(`${baseUrl}getFilteredRecipeDetails/${selectedCategory}`, {
-        
-  //     });
-  //     if (response.status === 200 || refreshing === true) {
-  //       setRecipelist(response.data.payload);
-  //       console.log(response.data.payload)
-
-  //     } else {
-  //       throw new Error("An error has occurred");
-  //     }
-  //   } catch (error) {
-
-  //   }
-  // };
 
   const onRefresh = useCallback(() => {
     fetchRecipe();
@@ -230,18 +181,23 @@ useEffect(() => {
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
 
           <TouchableOpacity style={styles.categoryCont} onPress={fetchRecipe}>
+          <Image style={styles.categoryPic} source={require('../../bread.png')} />
             <Text style={styles.categoryText}>All</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.categoryCont} onPress={() => {fetchBreakfast()}}>
+          <Image style={styles.categoryPic} source={require('../../waffle.png')} />
             <Text style={styles.categoryText}>Breakfast</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.categoryCont} onPress={() => {fetchLunch()}}>
+          <Image style={styles.categoryPic} source={require('../../spaghetti.png')} />
             <Text style={styles.categoryText}>Lunch</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.categoryCont} onPress={() => {fetchDinner()}}>
+          <Image style={styles.categoryPic} source={require('../../chicken.png')} />
             <Text style={styles.categoryText}>Dinner</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.categoryCont} onPress={() => {fetchDessert()}}>
+          <Image style={styles.categoryPic} source={require('../../cake.png')} />
             <Text style={styles.categoryText}>Dessert</Text>
           </TouchableOpacity>
           
@@ -332,15 +288,20 @@ const styles = StyleSheet.create({
     fontFamily: 'CL-Bold'
   },
   categoryCont: {
-    borderWidth: 3,
-    borderColor: COLORS.green,
     padding: 12,
-    width: 100,
+    width: 130,
+    width: 130,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 30,
-    margin: 5
+    borderRadius: 10,
+    margin: 5,
+    elevation: 2,
+    backgroundColor: COLORS.white
+},
+categoryPic:{
+  width: 50,
+  height: 50,
 },
 categoryText: {
     color: COLORS.green,

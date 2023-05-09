@@ -39,7 +39,8 @@ const Searchfilter = ({data, input, setInput, navigation}) => {
                     <View style={styles.leftCont}>
                         <BookmarkButton data={item.id}/>
                     </View>
-                </TouchableOpacity> )
+                </TouchableOpacity> 
+                )
             }
             if(item.name.toLowerCase().includes(input.toLowerCase())) {
                 return ( 

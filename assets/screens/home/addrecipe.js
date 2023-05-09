@@ -120,17 +120,12 @@ const Addrecipe = ({navigation}) => {
         directions:directions,
         });
         if (response.status === 200) {
-          // setState(true);
-          // alert(response.data.payload.id);
           if (image) {
-            // saveImageDB(response.data.payload.id);
-            alert("meron picture");
+            alert("Succesfully Added a Recipe!");
           } else {
-            alert("walang laman si data");
           }
         } else {
-          // setState(false);
-          alert("d nagsave");
+
           throw new Error("An error has occurred");
         }
       } catch (error) {
@@ -153,58 +148,19 @@ const Addrecipe = ({navigation}) => {
         );
         if (response.status === 200) {
           if (image) {
-            // saveImageDB(response.data.payload.id);
-            alert("meron picture");
+            alert("Succesfully Added a Recipe!");
           } else {
-            alert("walang laman si data");
+            alert("Succesfully Added a Recipe!");
           }
           return navigation.navigate(ROUTES.RECIPE_HOME);
         } else {
-          // setState(false);
-          alert("d nagsave");
           throw new Error("An error has occurred");
         }
       } catch (error) {
-        alert("Invalid Username or Email!");
+        alert("Invalid!");
       }
     }
   };
-
-  // const createFormData = (_image, body = {}) => {
-  //   const data = new FormData();
-  
-  //   data.append('photo', {
-  //     name: photo.fileName,
-  //     type: photo.type,
-  //     uri: Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri,
-  //   });
-  
-  //   Object.keys(body).forEach((key) => {
-  //     data.append(key, body[key]);
-  //   });
-  
-  //   return data;
-  // };
-
-  // const addImage = () => {
-  //   let image = ImagePicker.openPicker({
-  //     width: 300,
-  //     height: 400,
-  //     cropping: true
-  //   }).then(image => {
-  //     console.log(image);
-  //   });
-  // }
-
-  // const handleChoosePhoto = () => {
-  //   launchImageLibrary({ noData: true }, (response) => {
-  //     // console.log(response);
-  //     if (response) {
-  //       setPhoto(response);
-  //     }
-  //   });
-  // };
-
 
 
     return (
@@ -236,13 +192,6 @@ const Addrecipe = ({navigation}) => {
         <View style={styles.line}></View>
         
         <View style={styles.inputWholeCont}>
-        {/* <View style={styles.uploadCont}>
-          <Text style={styles.textUpload}>Upload Image:</Text>
-          <TouchableOpacity style={styles.bodyBtn} onPress={addImage}>
-            <Text style={styles.textUploadBtn}>Choose Image</Text>
-          </TouchableOpacity>
-        </View> */}
-        {/* <Button title="Choose Photo" onPress={handleChoosePhoto} /> */}
         <View style={imageUploaderStyles.container}>
                 {
                     image  && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
