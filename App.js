@@ -6,7 +6,6 @@ import { SvgXml } from 'react-native-svg';
 import {useFonts} from 'expo-font';
 import { NavigationContainer } from "@react-navigation/native";
 import AuthNavigator from './assets/navigator/AuthNavigator';
-
 export default function App() {
   
   let [fontsLoaded] = useFonts({
@@ -21,8 +20,11 @@ export default function App() {
   }
 
     return (
+      
     <NavigationContainer>
+      <StatusBar translucent={true}></StatusBar>
       <AuthNavigator/>
+      
     </NavigationContainer>
     )
 }

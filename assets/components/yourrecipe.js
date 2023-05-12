@@ -6,7 +6,7 @@ import {useFonts} from 'expo-font';
 import {ROUTES} from '../constants/routes';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DeleteButton from './deleteBtn';
-
+const baseUrl = 'http://192.168.18.43/PcookApp/';
 
 const YourRecipefilter = ({data, input, setInput}) => {
     let [fontsLoaded] = useFonts({
@@ -26,28 +26,28 @@ const YourRecipefilter = ({data, input, setInput}) => {
                return ( 
                 <TouchableOpacity style={styles.recipeCont}>
                     <View style={styles.rightCont}>
-                        <Image style={styles.recipeImg} source={item.recipeImg} />
+                        <Image style={styles.recipeImg} source={{uri: baseUrl + item.img_location}} />
                     </View>
                     <View style={styles.middleCont}>
-                        <Text style={styles.recipeTitle}>{item.recipeTitle}</Text>
-                        <Text style={styles.recipeCreator}>by {item.recipeCreator}</Text>
-                        <Text style={styles.recipeTD}>{item.recipeTD}</Text>
+                        <Text style={styles.recipeTitle}>{item.name}</Text>
+                        <Text style={styles.recipeCreator}>by {item.fullname}</Text>
+                        <Text style={styles.recipeTD}>{item.cooking_time}MIN | {item.difficulty}</Text>
                     </View>
                     <View style={styles.leftCont}>
-                        <DeleteButton/>
+                        <DeleteButton data={item.id}/>
                     </View>
                 </TouchableOpacity> )
             }
-            if(item.recipeTitle.toLowerCase().includes(input.toLowerCase())) {
+            if(item.name.toLowerCase().includes(input.toLowerCase())) {
                 return ( 
                  <TouchableOpacity style={styles.recipeCont}>
                      <View style={styles.rightCont}>
-                         <Image style={styles.recipeImg} source={item.recipeImg} />
+                         <Image style={styles.recipeImg} source={{uri: baseUrl + item.img_location}} />
                      </View>
                      <View style={styles.middleCont}>
-                         <Text style={styles.recipeTitle}>{item.recipeTitle}</Text>
-                         <Text style={styles.recipeCreator}>by {item.recipeCreator}</Text>
-                         <Text style={styles.recipeTD}>{item.recipeTD}</Text>
+                         <Text style={styles.recipeTitle}>{item.name}</Text>
+                         <Text style={styles.recipeCreator}>by {item.fullname}</Text>
+                         <Text style={styles.recipeTD}>{item.cooking_time}MIN | {item.difficulty}</Text>
                      </View>
                      <View style={styles.leftCont}>
                          <DeleteButton/>

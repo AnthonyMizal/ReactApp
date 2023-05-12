@@ -11,28 +11,151 @@ class Get{
         $this->gm = new GlobalMethods($pdo);
     }
 
-    // customer function
-        // get function for customer reservations
-        public function get_reservation($table, $condition = null){
-            // 2-Confirm 1-Tentative 0-Cancel	
-            $sql = "SELECT reservation_appointments.*, cms_categories.name from reservation_appointments JOIN cms_categories ON reservation_appointments.room_id = cms_categories.id";
-            if ($condition != null) {
-                $sql .= " WHERE {$condition}";
+    public function addRecipe($table, $received_data)
+    {
+        $user_id = $received_data->user_id;
+        $name = $received_data->name;
+        $video_link = $received_data->video_link;
+        $difficulty = $received_data->difficulty;
+        $category = $received_data->category;
+        $cooking_time = $received_data->cooking_time;
+        $ingredients = $received_data->ingredients;
+        $directions = $received_data->directions;
+
+
+        $sql = "INSERT INTO $table (user_id, name, video_link, difficulty, category, cooking_time, ingredients, directions) VALUES ('$user_id', '$name', '$video_link ', '$difficulty', '$category', '$cooking_time', '$ingredients', '$directions')";
+
+        $res = $this->gm->executeQuery($sql);
+
+        // $sql = "SELECT MAX(id) AS id from $table";
+        // $stmt = $this->pdo->prepare($sql);
+        // $stmt->execute();
+        // $res = $stmt->fetchAll()[0];
+        // $order_id = $res['id'];
+
+        // $profile = array(
+        //     "id" => $order_id
+        // );
+
+        return $this->gm->returnPayload(null, 'success', 'successfully inserted data', 200);
+    }
+    public function addRecipeWithPic($table, $received_data)
+    {
+        $user_id = $received_data->user_id;
+        $name = $received_data->name;
+        $video_link = $received_data->video_link;
+        $difficulty = $received_data->difficulty;
+        $category = $received_data->category;
+        $cooking_time = $received_data->cooking_time;
+        $ingredients = $received_data->ingredients;
+        $directions = $received_data->directions;
+
+
+        $sql = "SELECT MAX(id) AS id from recipes";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        $res = $stmt->fetchAll()[0];
+        $id = $res['id'];
+
+
+        $sql = "UPDATE $table SET user_id = '$user_id', name = '$name', video_link = '$video_link', difficulty = '$difficulty', category = '$category', cooking_time = '$cooking_time', ingredients = '$ingredients', directions = '$directions' WHERE id = $id";
+        var_dump($sql);
+        $res = $this->gm->executeQuery($sql);
+
+        return $this->gm->returnPayload(null, 'success', 'successfully inserted data', 200);
+    }
+
+
+    public function file($table, $data, $condition_string = null)
+    {
+
+        try {
+
+            if ($_FILES['file']['name'] != '') {
+                $test = explode('.', $_FILES['file']['name']);
+                $extension = end($test);
+                $allowedExts = array("jpeg", "jpg", "png");
+                if ((($_FILES["file"]["type"] == "image/jpeg")
+                    || ($_FILES["file"]["type"] == "image/jpg")
+                    || ($_FILES["file"]["type"] == "image/pjpeg")
+                    || ($_FILES["file"]["type"] == "image/x-png")
+                    || ($_FILES["file"]["type"] == "image/png")))
+                    $name = date("Y-m-d") . rand(100, 999999999999) . '.' . $extension;
+                // $location = '../uploads/'.$name;
+                $location = '../assets/recipeimages/' . $name;
+                $location2 = '/assets/recipeimages/' . $name;
+                move_uploaded_file($_FILES['file']['tmp_name'], $location);
+
+                $sql_str = "INSERT INTO recipes (`img_location`) VALUES ('$location2')";
+                $sql = $this->pdo->prepare($sql_str);
+                $sql->execute();
+                return $this->gm->returnPayload(null, "success", "image saved", 200);
             }
-            
-            $res = $this->gm->executeQuery($sql);
-            if($res['code']==200){
-                return $this->gm->returnPayload($res['data'], "success", "Succesfully retieved Reservation Appointments", $res['code']);
-            }
-    
-            return $this->gm->returnPayload(null, "failed", "failed to retrieve Reservation Appointments", $res['code']);
+
+
+            // // unlink($location);
+
+            // // prepare sql stmts
+            // // var_dump($sql);
+            // // execute em..
         }
+        // if not..
+        catch (Exception $e) {
+            $errmsg = $e->getMessage();
+            $code = 403;
+        }
+    }
+
+
+    // public function file($table, $data, $condition){
+
+    //     try{
+            
+    //         if($_FILES['file']['name'] != ''){
+    //             $test = explode('.', $_FILES['file']['name']);
+    //             $extension = end($test);    
+    //             $allowedExts = array("jpeg", "jpg", "png");
+    //         if ((($_FILES["file"]["type"] == "image/jpeg")
+    //             || ($_FILES["file"]["type"] == "image/jpg")
+    //             || ($_FILES["file"]["type"] == "image/pjpeg")
+    //             || ($_FILES["file"]["type"] == "image/x-png")
+    //             || ($_FILES["file"]["type"] == "image/png"))
+
+    //          )
+    //             $name = date("Y-m-d").rand(100,999999999999).'.'.$extension;
+    //             // $location = '../uploads/'.$name;
+    //             $location = '../assets/recipeimages/'.$name;
+    //             move_uploaded_file($_FILES['file']['tmp_name'], $location);
+                
+    //         }
+      
+    //     $sql_str = "UPDATE $table SET img_location = '$location'";
+    //     // unlink($location);
+
+    //             $sql_str .= " WHERE {$condition}";
+        
+    //     // prepare sql stmts
+    //     $sql = $this->pdo->prepare($sql_str);
+    //    // var_dump($sql);
+    //     // execute em..
+    //     $sql->execute();
+
+    //     }
+    //     // if not..
+    //     catch(Exception $e){
+    //         $errmsg = $e->getMessage();
+    //         $code = 403;
+    //     }
+    // }
+
+
+    
 
         // get booking function
-        public function get_booking($table, $condition = null){
+        public function get_recipe($table, $condition = null){
             // 2-Confirm 1-Tentative 0-Cancel	
-            $sql = "SELECT reservation_appointments.*, billing_invoice.total_amount FROM reservation_appointments 
-            JOIN billing_invoice ON reservation_appointments.invoice_id = billing_invoice.id";
+            $sql = "SELECT recipes.*, users.fullname FROM recipes
+            JOIN users ON recipes.user_id = users.id";
             if ($condition != null) {
                 $sql .= " WHERE {$condition}";
             }
@@ -45,11 +168,11 @@ class Get{
             return $this->gm->returnPayload(null, "failed", "failed to retrieve Booking History", $res['code']);
         }
 
-        // get all bookings of the logged guest with status complete
-        public function get_bookinghistory($table, $condition = null){
+
+        public function view_recipe_details($table, $condition = null){
             // 2-Confirm 1-Tentative 0-Cancel	
-            $sql = "SELECT reservation_appointments.*, billing_invoice.total_amount FROM reservation_appointments 
-            JOIN billing_invoice ON reservation_appointments.invoice_id = billing_invoice.id";
+            $sql = "SELECT recipes.*, users.fullname FROM recipes
+            JOIN users ON recipes.user_id = users.id";
             if ($condition != null) {
                 $sql .= " WHERE {$condition}";
             }
@@ -61,6 +184,35 @@ class Get{
     
             return $this->gm->returnPayload(null, "failed", "failed to retrieve Booking History", $res['code']);
         }
+
+        public function get_personal_recipe($table, $condition = null){
+            // 2-Confirm 1-Tentative 0-Cancel	
+            $sql = "SELECT recipes.*, users.fullname FROM recipes
+            JOIN users ON recipes.user_id = users.id";
+
+            $res = $this->gm->executeQuery($sql);
+            if ($res['code'] == 200) {
+                return $this->gm->returnPayload($res['data'], "success", "Succesfully retieved Booking History", $res['code']);
+            }
+    
+            return $this->gm->returnPayload(null, "failed", "failed to retrieve Booking History", $res['code']);
+        }
+
+        public function get_favorites_recipe($table, $condition = null){
+            // 2-Confirm 1-Tentative 0-Cancel	
+            $sql = "SELECT recipes.*, users.fullname FROM bookmark JOIN recipes ON bookmark.recipe_id = recipes.id JOIN users ON bookmark.user_id = users.id";
+
+            if ($condition != null) {
+                $sql .= " WHERE {$condition}";
+            }
+            $res = $this->gm->executeQuery($sql);
+            if ($res['code'] == 200) {
+                return $this->gm->returnPayload($res['data'], "success", "Succesfully retieved Booking History", $res['code']);
+            }
+    
+            return $this->gm->returnPayload(null, "failed", "failed to retrieve Booking History", $res['code']);
+        }
+
 
         // get customer accounts
         public function get_account($table, $condition = null){
@@ -77,46 +229,18 @@ class Get{
             return $this->gm->returnPayload(null, "failed", "failed to retrieved data", $res['code']);
         }
 
-         // get reservation details
-         public function get_details($table, $received_data){
-            $id = $received_data->id;
-            // 2-Confirm 1-Tentative 0-Cancel
-            $sql = "SELECT reservation_appointments.*, cms_categories.name, cms_categories.description, cms_categories.price, cms_rooms.room_number, billing_invoice.total_amount from reservation_appointments 
-            JOIN cms_categories ON reservation_appointments.room_id = cms_categories.id 
-            JOIN cms_rooms ON reservation_appointments.room_id = cms_rooms.id
-            JOIN billing_invoice ON reservation_appointments.invoice_id = billing_invoice.id
-            WHERE reservation_appointments.id = $id";
-
+        public function get_created_recipe($table, $condition = null){
+            $sql = "SELECT MAX(id) as id FROM $table";
+            
             $res = $this->gm->executeQuery($sql);
             if ($res['code'] == 200) {
-                return $this->gm->returnPayload($res['data'], "success", "Succesfully retieved details", $res['code']);
+                return $this->gm->returnPayload($res['data'], "success", "Succesfully retieved data", $res['code']);
             }
-
-            return $this->gm->returnPayload(null, "failed", "failed to retrieve details", $res['code']);
+    
+            return $this->gm->returnPayload(null, "failed", "failed to retrieved data", $res['code']);
         }
 
-        // get remark
-        public function addRemark($table, $received_data){
-            $id = $received_data->reservation_appointments_id;
-            $remarks = $received_data->remarks;
-            
-            // 2-Confirm 1-Tentative 0-Cancel
-            $sql = "INSERT INTO $table (reservation_appointments_id,remarks) 
-            values ($id,'$remarks')";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute();  
-            
-            $sql2 = "UPDATE reservation_appointments SET status = 'Cancelled' WHERE id = $id";
-            $stmt2 = $this->pdo->prepare($sql2);
-            $stmt2->execute();   
 
-            $code = 200;
-                    $remarks = "success";
-                    $message = "Reservation Cancelled!";
-                    $payload = null;
-            return $this->gm->returnPayload($payload, $remarks, $message, $code);
-            
-        }
 
     //     public function uploadimage($received_data)
     // {
@@ -136,28 +260,7 @@ class Get{
     //     }
     // }
 
-    
-        public function addFeedback($table, $received_data){
-            $id = $received_data->reservation_appointments_id;
-            $feedback = $received_data->feedback;
-            
-            // 2-Confirm 1-Tentative 0-Cancel
-            $sql = "INSERT INTO $table (reservation_appointments_id,feedback) 
-            values ($id,'$feedback')";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute();  
-            
-            $sql2 = "UPDATE reservation_appointments SET booking_feedback_status = 'DONE' WHERE id = $id";
-            $stmt2 = $this->pdo->prepare($sql2);
-            $stmt2->execute();   
 
-            $code = 200;
-                    $remarks = "success";
-                    $message = "Feedback Submitted!";
-                    $payload = null;
-            return $this->gm->returnPayload($payload, $remarks, $message, $code);
-            
-        }
 
         // get_common for user accounts
         public function get_common($table, $condition = null){
@@ -176,33 +279,6 @@ class Get{
             return $this->gm->returnPayload(null, "failed", "failed to retrieve data", $res['code']);
         }
 
-        public function get_cancelled($table){
-            $sql = "SELECT * FROM $table WHERE status = 'Tentative'";
-            if($condition!=null){
-                $sql .= " WHERE {$condition}";
-            }
-          
-            $res = $this->gm->executeQuery($sql);
-            if($res['code']==200){
-                return $this->gm->returnPayload($res['data'], "success", "Succesfully retieved data", $res['code']);
-            }
-    
-            return $this->gm->returnPayload(null, "failed", "failed to retrieve data", $res['code']);
-        }
-
-        public function get_status($table, $condition = null){
-            $sql = "SELECT status FROM $table";
-            if($condition!=null){
-                $sql .= " WHERE {$condition}";
-            }
-          
-            $res = $this->gm->executeQuery($sql);
-            if($res['code']==200){
-                return $this->gm->returnPayload($res['data'], "success", "Succesfully retieved data", $res['code']);
-            }
-    
-            return $this->gm->returnPayload(null, "failed", "failed to retrieve data", $res['code']);
-        }
 
 
 

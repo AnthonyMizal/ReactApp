@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView, Button } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Image,ToastAndroid, TouchableOpacity, TextInput, KeyboardAvoidingView, Button } from 'react-native';
 import {COLORS} from '../../constants/colors';
 import { SvgXml } from 'react-native-svg';
 import {useFonts} from 'expo-font';
@@ -61,7 +61,7 @@ const Signup = (props) =>  {
         password
       });
       if (response.status === 200) {
-        alert(` You have succesfully created an account!`);
+        ToastAndroid.show('Succesfully created an account!', ToastAndroid.SHORT);
         setFullname('');
         setEmail('');
         setUsername('');
@@ -76,9 +76,9 @@ const Signup = (props) =>  {
   };
 
     return (
-      <ScrollView vertical={true} showsVerticalScrollIndicator={false}>
-    <View style={styles.container} >
       
+    <View style={styles.container} >
+      <ScrollView vertical={true} showsVerticalScrollIndicator={false} style={styles.scrollview}>
       <View style={styles.box}>
         <View style={styles.picContainer}>
           
@@ -96,7 +96,7 @@ const Signup = (props) =>  {
         <TextInput style={styles.input} placeholder='Fullname' value={fullname} onChangeText={onChangeNameHandler}/>
         <TextInput style={styles.input} placeholder='Email' value={email} onChangeText={onChangeEmailHandler}/>
         <TextInput style={styles.input} placeholder='Username' value={username} onChangeText={onChangeUsernameHandler}/>
-        <TextInput style={styles.input} placeholder='Password' value={password} onChangeText={onChangePasswordHandler}/>
+        <TextInput style={styles.input} placeholder='Password' value={password} onChangeText={onChangePasswordHandler} secureTextEntry/>
      
 
       </View>
@@ -110,17 +110,21 @@ const Signup = (props) =>  {
         <Text style={styles.registerTxt}>LOGIN</Text>
         </TouchableOpacity>
       </View>
-      
+      </ScrollView>
      </View>
-    </ScrollView>
+    
     )
 }
 
 const styles = StyleSheet.create({
+  // scrollview: {
+  //   flex: 1,
+  // },
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
     alignItems: 'center',
+    justifyContent: 'center'
   },
   box: {
     backgroundColor: '#A1FFB1',
@@ -176,7 +180,7 @@ const styles = StyleSheet.create({
     padding: 18,
     paddingHorizontal: 100,
     borderRadius: 30,
-    width: '80%',
+    width: '100%',
     alignItems: 'center'
   },
   getStartedTxt: {
@@ -190,7 +194,7 @@ const styles = StyleSheet.create({
     padding: 18,
   },
   inputWrapper: {
-    width: '80%',
+    width: '100%',
     gap: 20,
     marginTop: 40
   },

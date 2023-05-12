@@ -6,6 +6,9 @@ import Signup from '../screens/auth/signup'
 import {ROUTES} from '../constants/routes'
 import BottomTabNavigator from './BottomTabNavigator';
 import { createStackNavigator } from '@react-navigation/stack';
+import Profile from '../screens/home/profile';
+import EditProfile from '../screens/home/editprofile';
+import ManageRecipe from '../screens/home/managerecipe';
 
 const Stack = createStackNavigator();
 
@@ -21,6 +24,10 @@ const AuthNavigator = () => {
         <Stack.Screen name={ROUTES.LOGIN} component={Login}/>
         <Stack.Screen name={ROUTES.SIGNUP} component={Signup}/>
         <Stack.Screen name={ROUTES.HOME_NAVIGATOR} component={BottomTabNavigator}/>
+        <Stack.Screen name={ROUTES.PROFILE} component={Profile}/>
+        <Stack.Screen name={ROUTES.EDIT_PROFILE} component={EditProfile}/>
+        {/* <Stack.Screen name={ROUTES.LOGIN} component={Login}/> */}
+        <Stack.Screen name={ROUTES.MANAGE_RECIPE} component={ManageRecipe}/>
     </Stack.Navigator>
   );
 }

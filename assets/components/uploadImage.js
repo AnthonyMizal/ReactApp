@@ -2,8 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Image, View, Platform, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+
+
 export default function UploadImage() {
-  const [image, setImage] = useState(null);
+  const [image, setImagePath] = useState(null);
+  const [imageName, setImageName] = useState(null);
+  const [imageType, setImageType] = useState(null);
   const addImage = async () => {
     let _image = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -11,9 +15,22 @@ export default function UploadImage() {
         aspect: [4,3],
         quality: 1,
     });
-    console.log(JSON.stringify(_image.uri));
-    if (!_image.cancelled) {
-      setImage(_image.uri);
+
+    if (!_image.canceled) {
+      setImagePath(_image.uri);
+      
+      setImageType(_image.type);
+      let path = _image.uri;
+        if (Platform.OS === "ios") {
+        path = "~" + path.substring(path.indexOf("/Documents"));
+        }
+        if (!_image.fileName){
+            new_path = path.split("/").pop();
+        } 
+        setImageName(new_path);
+      console.log(JSON.stringify(_image.uri));
+      console.log(JSON.stringify(new_path));
+      console.log(JSON.stringify(_image.type));
     }
   }
   
@@ -24,7 +41,7 @@ export default function UploadImage() {
                 }
                     <View style={imageUploaderStyles.uploadBtnContainer}>
                         <TouchableOpacity onPress={addImage} style={imageUploaderStyles.uploadBtn} >
-                            <Text>{image ? 'Edit' : 'Upload'} Image</Text>
+                            <Text>{image? 'Edit' : 'Upload'} Image</Text>
                             <AntDesign name="camera" size={20} color="black" />
                         </TouchableOpacity>
                         

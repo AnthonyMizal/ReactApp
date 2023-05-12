@@ -25,7 +25,7 @@ const Categoryfilter = ({data, input, setInput}) => {
         <FlatList numColumns={5} scrollEnabled={false} data={data} renderItem={({item}) => {
             if(input === "") {
                return ( 
-                    <TouchableOpacity style={styles.categoryCont}>
+                    <TouchableOpacity style={styles.categoryCont} key={item.id}>
                         <Text style={styles.categoryText}>{item.category}</Text>
                     </TouchableOpacity>
                 )

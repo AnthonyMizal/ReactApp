@@ -8,7 +8,7 @@ import BookmarkButton from './bookmarkBtn';
 import axios from 'axios';
 const baseUrl = 'http://192.168.18.43/PcookApp/';
 
-const Searchfilter = ({data, input, setInput, navigation}) => {
+const BookmarkFilter = ({data}) => {
 
 
     let [fontsLoaded] = useFonts({
@@ -24,9 +24,9 @@ const Searchfilter = ({data, input, setInput, navigation}) => {
 
     return (
         <FlatList scrollEnabled={false} data={data} keyExtractor={item => item.id.toString()} renderItem={({item}) => {
-            if(input === "") {
+
                return ( 
-                <TouchableOpacity style={styles.recipeCont} key={item.id} onPress={() => {navigation.navigate(ROUTES.RECIPE_DETAILS, item)}}>
+                <TouchableOpacity style={styles.recipeCont} key={item.id}>
                     <View style={styles.rightCont}>
                         <Image style={styles.recipeImg} source={{uri: baseUrl + item.img_location}} />
                     </View>
@@ -34,31 +34,13 @@ const Searchfilter = ({data, input, setInput, navigation}) => {
                     <View style={styles.middleCont}>
                         <Text style={styles.recipeTitle}>{item.name}</Text>
                         <Text style={styles.recipeCreator}>by {item.fullname}</Text>
-                        <Text style={styles.recipeTD}>{item.cooking_time} MIN | {item.difficulty}</Text>
+                        <Text style={styles.recipeTD}>{item.cooking_time} | {item.difficulty}</Text>
                     </View>
                     <View style={styles.leftCont}>
                         <BookmarkButton data={item.id}/>
                     </View>
-                </TouchableOpacity> 
-                )
-            }
-            if(item.name.toLowerCase().includes(input.toLowerCase())) {
-                return ( 
-                 <TouchableOpacity style={styles.recipeCont} key={item.id} onPress={() => navigation.navigate(ROUTES.RECIPE_DETAILS, item)}> 
-                     <View style={styles.rightCont}>
-                         <Image style={styles.recipeImg} source={{uri: baseUrl + item.img_location}}/>
-                     </View>
-                     <View style={styles.middleCont}>
-                         <Text style={styles.recipeTitle}>{item.name}</Text>
-                         <Text style={styles.recipeCreator}>by {item.fullname}</Text>
-                         <Text style={styles.recipeTD}>{item.cooking_time} | {item.difficulty}</Text>
-                     </View>
-                     <View style={styles.leftCont}>
-                         <BookmarkButton data={item}/>
-                     </View>
-                 </TouchableOpacity> )
-             }
-        
+                </TouchableOpacity> )
+            
         }}/>
         
     );
@@ -109,4 +91,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Searchfilter;
+export default BookmarkFilter;

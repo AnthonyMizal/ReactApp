@@ -1,87 +1,149 @@
-import React, {useState} from 'react';
-import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
+import React, {useState, useEffect, useCallback} from 'react';
+import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, TextInput, RefreshControl } from 'react-native';
 import {COLORS} from '../../constants/colors';
 import {useFonts} from 'expo-font';
-import {ROUTES} from '../../constants/routes';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Searchfilter from '../../components/searchfilter';
 import Categoryfilter from '../../components/categoryFilter';
-const xml =`
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ffffff" fill-opacity="1" d="M0,224L80,186.7C160,149,320,75,480,80C640,85,800,171,960,192C1120,213,1280,171,1360,149.3L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
-`;
+import Category from '../../components/category';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
+
 
 
 
 const Home = ({navigation}) => {
-  
-  const categories = [
-    {
-      id: '1',
-      category: 'All',
-    },
-    {
-      id: '2',
-      category: 'Breakfast',
-    },
-    {
-      id: '3',
-      category: 'Lunch',
-    },
-    {
-      id: '4',
-      category: 'Dinner',
-    },
-    {
-      id: '5',
-      category: 'Dessert',
-    },
-  ]
+  const [recipelist, setRecipelist] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
 
-  const recipelist = [
-    {
-      id: '1',
-      recipeImg: require('../../sisig.jpg'),
-      recipeTitle: 'pork sisig',
-      recipeCreator: 'Jazmine Althea Isip',
-      recipeTD: '30 min | medium',
-      category: 'LUNCH'
-    },
-    {
-      id: '2',
-      recipeImg: require('../../crispypata.jpg'),
-      recipeTitle: 'Crispy Pata',
-      recipeCreator: 'Kim Padua',
-      recipeTD: '30 min | easy',
-      category: 'DINNER'
-    },
-    {
-      id: '3',
-      recipeImg: require('../../kaldereta.jpg'),
-      recipeTitle: 'kaldereta',
-      recipeCreator: 'Jasper Mamaril',
-      recipeTD: '30 min | hard',
-      category: 'DINNER'
-    },
-    {
-      id: '4',
-      recipeImg: require('../../adobo.jpg'),
-      recipeTitle: 'Adobo',
-      recipeCreator: 'Nathaniel Ribada',
-      recipeTD: '30 min | medium',
-      category: 'BREAKFAST'
+useEffect(() => {
+    fetchRecipe();
+  }, []);
+
+
+//   async function fetchUserData() {
+
+//     axios.get(`${baseUrl}fetchuser/${name}`, {
+//     }).then((response) =>
+//     {
+//       console.log(response.data);
+//     }).catch(error => {
+//       console.error(error);
+//     });
+// }
+
+
+
+  const fetchRecipe = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}getRecipeDetails`, {
+        
+      });
+      if (response.status === 200 || refreshing === true) {
+        setRecipelist(response.data.payload);
+        console.log(response.data.payload)
+
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+
     }
-  ];
+  };
+
+  const fetchLunch = async () => {
+    try {
+      
+      const response = await axios.get(`${baseUrl}getFilteredRecipeDetails/LUNCH`, {
+        
+      });
+      if (response.status === 200 || refreshing === true) {
+        setRecipelist(response.data.payload);
+        console.log(response.data.payload)
+
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+
+    }
+  };
+
+  const fetchBreakfast = async () => {
+    try {
+      
+      const response = await axios.get(`${baseUrl}getFilteredRecipeDetails/BREAKFAST`, {
+        
+      });
+      if (response.status === 200 || refreshing === true) {
+        setRecipelist(response.data.payload);
+        console.log(response.data.payload)
+
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+
+    }
+  };
+
+  const fetchDinner = async () => {
+    try {
+      
+      const response = await axios.get(`${baseUrl}getFilteredRecipeDetails/DINNER`, {
+        
+      });
+      if (response.status === 200 || refreshing === true) {
+        setRecipelist(response.data.payload);
+        console.log(response.data.payload)
+
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+
+    }
+  };
+
+
+  const fetchDessert= async () => {
+    try {
+      
+      const response = await axios.get(`${baseUrl}getFilteredRecipeDetails/DESSERT`, {
+        
+      });
+      if (response.status === 200 || refreshing === true) {
+        setRecipelist(response.data.payload);
+        console.log(response.data.payload)
+
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+
+    }
+  };
+
+
+
+  const onRefresh = useCallback(() => {
+    fetchRecipe();
+    setRefreshing(true);
+    console.log(selectedCategory)
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
 
   const [item, setRecipe] = useState('');
   const [itemCategory, setCategory] = useState('');
-  const setCategoryFilter = itemCategory => {
-    setCategory(itemCategory)
-  }
 
-  const handlePress = () => {
-    return console.log("Testing")
-  }
+
+
   let [fontsLoaded] = useFonts({
     'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
     'Momcake-Thin': require('../../fonts/Momcake-Thin.otf'),
@@ -92,9 +154,13 @@ const Home = ({navigation}) => {
   if (!fontsLoaded) {
     return null;
   }
-  console.log(itemCategory)
+
+
     return (
-    <View style={styles.container}>
+      <ScrollView refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      } style={styles.container}>
+    <View>
       <View style={styles.header}>
       <Image style={styles.headinglogo} source={require('../../icons/heading.png')} />
       </View>
@@ -113,16 +179,27 @@ const Home = ({navigation}) => {
         </View>
         <View style={styles.categoryWrapper}>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          {/* <Category category="Breakfast"/>
-          <Category category="Lunch"/>
-          <Category category="Dinner"/>
-          <Category category="Dessert"/>
-          <Category category="Dessert"/> */}
-          {categories.map(e => (
-            <Categoryfilter data={categories} input={itemCategory} />
-          ))
-          
-          }
+
+          <TouchableOpacity style={styles.categoryCont} onPress={fetchRecipe}>
+          <Image style={styles.categoryPic} source={require('../../bread.png')} />
+            <Text style={styles.categoryText}>All</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.categoryCont} onPress={() => {fetchBreakfast()}}>
+          <Image style={styles.categoryPic} source={require('../../waffle.png')} />
+            <Text style={styles.categoryText}>Breakfast</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.categoryCont} onPress={() => {fetchLunch()}}>
+          <Image style={styles.categoryPic} source={require('../../spaghetti.png')} />
+            <Text style={styles.categoryText}>Lunch</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.categoryCont} onPress={() => {fetchDinner()}}>
+          <Image style={styles.categoryPic} source={require('../../chicken.png')} />
+            <Text style={styles.categoryText}>Dinner</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.categoryCont} onPress={() => {fetchDessert()}}>
+          <Image style={styles.categoryPic} source={require('../../cake.png')} />
+            <Text style={styles.categoryText}>Dessert</Text>
+          </TouchableOpacity>
           
           </ScrollView>
           
@@ -132,13 +209,13 @@ const Home = ({navigation}) => {
           <View style={styles.recipeTxtCont}>
             <Text style={styles.recipeTxt}>RECIPES</Text>
           </View>
-          <Searchfilter data={recipelist} input={item} setInput={setRecipe} />
+          <Searchfilter data={recipelist} input={item} setInput={setRecipe} navigation={navigation} key={recipelist.id}/>
         </View>
         
       </ScrollView>
         
     </View>
-    
+    </ScrollView>
     )
     
 }
@@ -209,7 +286,27 @@ const styles = StyleSheet.create({
   recipeTxt: {
     fontSize: 22,
     fontFamily: 'CL-Bold'
-  }
+  },
+  categoryCont: {
+    padding: 12,
+    width: 130,
+    width: 130,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    margin: 5,
+    elevation: 2,
+    backgroundColor: COLORS.white
+},
+categoryPic:{
+  width: 50,
+  height: 50,
+},
+categoryText: {
+    color: COLORS.green,
+    fontFamily: 'Momcake-Bold',
+},
 
 });
 
