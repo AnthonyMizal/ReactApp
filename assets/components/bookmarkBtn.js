@@ -3,7 +3,7 @@ import {View, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
+import { baseUrl } from '../constants/url';
 const BookmarkButton = (data) => {
   const [state, setState] = useState(false);
   // const [user_id, setUserID] = useState();

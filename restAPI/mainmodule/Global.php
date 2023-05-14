@@ -90,6 +90,52 @@ class GlobalMethods {
             return array("code" => $code, "errmsg" => $errmsg);
         }
 
+        public function updateProfile($table_name, $data, $condition_string)
+        {
+            // so i got bored and copied the insert code..
+            // and changed some stuff..
+            // some arrays..
+            $fields = [];
+            $values = [];
+            // passing data to these arrays..
+            foreach ($data as $key => $value) {
+                array_push($fields, $key);
+                array_push($values, $value);
+            }
+            //try
+            try {
+                $counter = 0;
+                $sql_str = "UPDATE $table_name SET ";
+                // advanced foreach loop uses 2 arrays but can use many arrays..
+                foreach ($fields as $index => $value) {
+                    // ensures that the recno_fld is untouchable..
+                    if ($value === "id") {
+                        // do nothing..
+                    }
+                    // if not recno_fld then move on..
+                    else {
+                        $sql_str .= " $value = '$values[$index]',";
+                    }
+                }
+                // now because we habe commas for each sql strings we wanna remove the last one..
+                $sql_str = rtrim($sql_str, ',');
+                // where recno_fld is something..
+                $sql_str .= "WHERE id = $data->id;";
+                // prepare sql stmts
+                $sql = $this->pdo->prepare($sql_str);
+                // execute em..
+                $sql->execute();
+                // if worked ..
+                return array("code" => 200, "remarks" => "success");
+            }
+            // if not..
+            catch (Exception $e) {
+                $errmsg = $e->getMessage();
+                $code = 403;
+            }
+            // return whatever..
+            return array("code" => $code, "errmsg" => $errmsg);
+        }
 
 
         public function file($table, $data, $condition_string){

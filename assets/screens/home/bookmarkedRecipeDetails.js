@@ -13,7 +13,7 @@ import { imgUrl } from '../../constants/url';
 
 
 
-const RecipeDetails = ({navigation, route}) => {
+const BookMarkedRecipeDetails = ({navigation, route}) => {
   const recipeDetail = route.params;
   function YouTubeGetID(url){
     url = url.split(/(vi\/|v%3D|v=|\/v\/|youtu\.be\/|\/embed\/)/);
@@ -71,7 +71,7 @@ const RecipeDetails = ({navigation, route}) => {
     <View style={styles.container}>
       <View style={styles.header}>
       <Image style={styles.recipeImg} source={{uri: imgUrl + recipeDetail.img_location}}/>
-          <TouchableOpacity onPress={() => navigation.navigate(ROUTES.RECIPE_HOME)}>
+          <TouchableOpacity onPress={() => navigation.navigate(ROUTES.BOOKMARK)}>
             <Icon
                 name= 'arrow-left'
                 size={28}
@@ -305,4 +305,4 @@ dropdowntxt: {
 
 });
 
-export default RecipeDetails;
+export default BookMarkedRecipeDetails;

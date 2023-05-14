@@ -9,16 +9,34 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import BookmarkFilter from '../../components/bookmarkedRecipe'
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
+import { baseUrl } from '../../constants/url';
+import { useFocusEffect } from "@react-navigation/native";
 
 
-
-const Bookmark = () => {
+const Bookmark = ({navigation}) => {
   const [recipelist, setRecipelist] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  useEffect(() => {
-    fetchRecipe();
-  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchRecipe();
+      // console.log("naload");
+      return () => {
+        fetchRecipe();
+        // console.log("umalis");
+      };
+    }, [])
+  );
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchRecipe();
+      // console.log("naload");
+      return () => {
+        fetchRecipe();
+        // console.log("umalis");
+      };
+    }, [])
+  );
 
     const fetchRecipe = async () => {
       user_id = await AsyncStorage.getItem("user");
@@ -74,7 +92,7 @@ const Bookmark = () => {
             <Text style={styles.recipeTxt}>Your Bookmarks</Text>
           </View>
           
-          <BookmarkFilter data={recipelist} key={recipelist.id}/>
+          <BookmarkFilter data={recipelist} navigation={navigation} key={recipelist.id}/>
         </View>
       </ScrollView>
     </View>

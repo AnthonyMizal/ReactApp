@@ -41,7 +41,9 @@ const category_picker = ["BREAKFAST", "LUNCH", "DINNER", "DESSERT"];
 
 
 
-const Addrecipe = ({navigation}) => {
+const Editrecipe = ({navigation, route}) => {
+  recipeDetails = route.params;
+
   const [user_id, setUser_Id] = useState();
   const [image, setImagePath] = useState(null);
   const [name, setName] = useState();
@@ -436,4 +438,4 @@ dropdowntxt: {
 
 });
 
-export default Addrecipe;
+export default Editrecipe;

@@ -1,24 +1,90 @@
-import React, {useState} from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, KeyboardAvoidingView,} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity, ToastAndroid, TextInput, KeyboardAvoidingView,} from 'react-native';
 import {COLORS} from '../../constants/colors';
-import { SvgXml } from 'react-native-svg';
 import {useFonts} from 'expo-font';
 import {ROUTES} from '../../constants/routes';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import SelectDropdown from 'react-native-select-dropdown';
 import { ScrollView } from 'react-native-gesture-handler';
-import Recipe from '../../components/recipe';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from "@react-navigation/native";
+import { baseUrl } from '../../constants/url';
 
-const xml =`
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ffffff" fill-opacity="1" d="M0,224L80,186.7C160,149,320,75,480,80C640,85,800,171,960,192C1120,213,1280,171,1360,149.3L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
-`;
 
-const difficulty = ["EASY", "MEDIUM", "HARD"];
-const category = ["BREAKFAST", "LUNCH", "DINNER", "DESSERT"];
 const EditProfile = ({navigation}) => {
+  const [accountInfo, setAccountInfo] = useState([]);
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
+  const [username, setUsername] = useState();
+
+  const onChangeName = (name) => {
+    setName(name);
+  };
   
+  const onChangeEmail = (email) => {
+    setEmail(email);
+  };
+
+  const onChangeUsername = (username) => {
+    setUsername(username);
+  };
+  // const [user_id, setUser_Id] = useState();
+  AsyncStorage.getItem("user");
+  // useEffect(() => {
+  //   fetchOwnAccount();
+  // }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchOwnAccount();
+      // console.log("naload");
+      return () => {
+        fetchOwnAccount();
+        // console.log("umalis");
+      };
+    }, [])
+  );
+  const fetchOwnAccount = async () => {
+    user_id = await AsyncStorage.getItem("user");
+    try {
+      const response = await axios.get(`${baseUrl}getOwnAccount/${user_id}`, {
+        
+      });
+      if (response.status === 200) {
+        setAccountInfo(response.data.payload[0]);
+        console.log(accountInfo.fullname)
+
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+
+    }
+  };
+  
+  const editProfile = async () => {
+    user_id = await AsyncStorage.getItem("user");
+    try {
+      const response = await axios.post(`${baseUrl}updateProfile`, {
+        id: user_id,
+        fullname: name,
+        email: email,
+        username: username
+      });
+      if (response.status === 200) {
+        ToastAndroid.show('Succesfully Saved!', ToastAndroid.SHORT);
+        console.log(response.data)
+        return navigation.navigate(ROUTES.PROFILE);
+      } else {
+        // setState(false);
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+      ToastAndroid.show('Invalid Details!', ToastAndroid.SHORT);
+    }
+  };
+
+
+
   let [fontsLoaded] = useFonts({
     'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
     'Momcake-Thin': require('../../fonts/Momcake-Thin.otf'),
@@ -29,6 +95,10 @@ const EditProfile = ({navigation}) => {
   if (!fontsLoaded) {
     return null;
   }
+
+
+
+
 
     return (
     <View style={styles.container}>
@@ -43,7 +113,7 @@ const EditProfile = ({navigation}) => {
           <View style={styles.iconCont}>
             <Image style={styles.icon} source={require('../../addrecipe.png')} />
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={editProfile}>
             <Text style={styles.doneText}>SAVE</Text>
           </TouchableOpacity>
       </View>
@@ -58,19 +128,20 @@ const EditProfile = ({navigation}) => {
 
         <View>
           <Text style={styles.textInput}>Fullname:</Text>
-          <TextInput  style={styles.input} placeholder='Type here the name of the recipe...'/>
+          <TextInput  style={styles.input} placeholder={accountInfo.fullname} placeholderTextColor="#000" value={name} onChangeText={onChangeName}/>
+
         </View>
         <View>
           <Text style={styles.textInput}>Email:</Text>
-          <TextInput  style={styles.input} placeholder='Paste the recipe video here...'/>
+          <TextInput  style={styles.input} placeholder={accountInfo.email} placeholderTextColor="#000" value={email} onChangeText={onChangeEmail}/>
         </View>
         <View>
           <Text style={styles.textInput}>Username:</Text>
-          <TextInput  style={styles.input} placeholder='Type here the cooking time...'/>
+          <TextInput  style={styles.input} placeholder={accountInfo.username} placeholderTextColor="#000" value={username} onChangeText={onChangeUsername}/>
         </View>
         <View>
           <Text style={styles.textInput}>Password:</Text>
-          <TextInput  style={styles.input} placeholder='Type here the cooking time...'/>
+          <TextInput  style={styles.input} placeholder={"Type your new password"} placeholderTextColor="#000"/>
         </View>
         
 
@@ -129,7 +200,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderColor: COLORS.green,
     fontFamily: 'CL-Bold',
-    borderRadius: 5
+    borderRadius: 5,
+    
   },
   inputBig:{
     backgroundColor: COLORS.placeholderBG,

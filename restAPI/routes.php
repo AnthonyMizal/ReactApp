@@ -132,6 +132,10 @@ switch($_SERVER['REQUEST_METHOD']){
                 echo json_encode($global->addnewrecipenoimage($data));
                 break;
 
+                case 'updateProfile':
+                    echo json_encode($global->update('users', $data, NULL));
+                break;
+
             default:
                 echo "request not found";
             break;
@@ -143,6 +147,7 @@ switch($_SERVER['REQUEST_METHOD']){
                 switch($req[0]){
                     // update customer profile request
                         
+
 
                         default:
                             echo "request not found";
@@ -162,6 +167,10 @@ switch($_SERVER['REQUEST_METHOD']){
                         else{
                             echo json_encode($get->get_recipe('recipes'));
                         }   
+                    break;
+
+                    case 'getOwnAccount':
+                        echo json_encode($get->get_common('users', "id = '$req[1]'"));
                     break;
 
                     case 'getcreatedrecipe':

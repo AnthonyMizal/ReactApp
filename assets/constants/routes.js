@@ -14,5 +14,9 @@ export const ROUTES =  {
     AUTH_NAVIGATOR: 'AuthNavigator',
     RECIPE_HOME: 'RecipeHome',
     RECIPE_DETAILS: 'RecipeDetails',
-    RECIPE_HOME_NAVIGATOR: 'RecipeHomeNavigator'
+    RECIPE_HOME_NAVIGATOR: 'RecipeHomeNavigator',
+    MANAGE_RECIPE_NAVIGATOR: 'ManageRecipeNavigator',
+    EDITOWNRECIPE: 'EditRecipe',
+    BOOKMARKED_RECIPE_DETAILS: 'BookMarkedRecipeDetails',
+    BOOKMARKED_RECIPE_NAVIGATOR: 'BookmarkedRecipeNavigator'
 }

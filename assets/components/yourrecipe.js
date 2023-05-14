@@ -6,9 +6,9 @@ import {useFonts} from 'expo-font';
 import {ROUTES} from '../constants/routes';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DeleteButton from './deleteBtn';
-const baseUrl = 'http://192.168.18.43/PcookApp/';
+import { imgUrl } from '../constants/url';
 
-const YourRecipefilter = ({data, input, setInput}) => {
+const YourRecipefilter = ({data, input, setInput, navigation}) => {
     let [fontsLoaded] = useFonts({
         'Momcake-Bold': require('../fonts/Momcake-Bold.otf'),
         'Momcake-Thin': require('../fonts/Momcake-Thin.otf'),
@@ -24,9 +24,9 @@ const YourRecipefilter = ({data, input, setInput}) => {
         <FlatList scrollEnabled={false} data={data} renderItem={({item}) => {
             if(input === "") {
                return ( 
-                <TouchableOpacity style={styles.recipeCont}>
+                <TouchableOpacity style={styles.recipeCont} onPress={() => {navigation.navigate(ROUTES.EDITOWNRECIPE, item)}}>
                     <View style={styles.rightCont}>
-                        <Image style={styles.recipeImg} source={{uri: baseUrl + item.img_location}} />
+                        <Image style={styles.recipeImg} source={{uri: imgUrl + item.img_location}} />
                     </View>
                     <View style={styles.middleCont}>
                         <Text style={styles.recipeTitle}>{item.name}</Text>
@@ -40,9 +40,9 @@ const YourRecipefilter = ({data, input, setInput}) => {
             }
             if(item.name.toLowerCase().includes(input.toLowerCase())) {
                 return ( 
-                 <TouchableOpacity style={styles.recipeCont}>
+                 <TouchableOpacity style={styles.recipeCont} onPress={() => {navigation.navigate(ROUTES.EDITOWNRECIPE, item)}}>
                      <View style={styles.rightCont}>
-                         <Image style={styles.recipeImg} source={{uri: baseUrl + item.img_location}} />
+                         <Image style={styles.recipeImg} source={{uri: imgUrl + item.img_location}} />
                      </View>
                      <View style={styles.middleCont}>
                          <Text style={styles.recipeTitle}>{item.name}</Text>

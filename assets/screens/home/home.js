@@ -4,11 +4,9 @@ import {COLORS} from '../../constants/colors';
 import {useFonts} from 'expo-font';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Searchfilter from '../../components/searchfilter';
-import Categoryfilter from '../../components/categoryFilter';
-import Category from '../../components/category';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
+import { useFocusEffect } from "@react-navigation/native";
+import { baseUrl } from '../../constants/url';
 
 
 
@@ -19,9 +17,16 @@ const Home = ({navigation}) => {
   const [selectedCategory, setSelectedCategory] = useState("All");
 
 
-useEffect(() => {
-    fetchRecipe();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchRecipe();
+      // console.log("naload");
+      return () => {
+        fetchRecipe();
+        // console.log("umalis");
+      };
+    }, [])
+  );
 
 
 //   async function fetchUserData() {

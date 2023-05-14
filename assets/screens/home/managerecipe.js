@@ -6,19 +6,27 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import YourRecipefilter from '../../components/yourrecipe';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
+import { baseUrl } from '../../constants/url';
+import { useFocusEffect } from "@react-navigation/native";
 
 
-
-const ManageRecipe = () => {
+const ManageRecipe = ({navigation}) => {
   const [recipelist, setRecipelist] = useState([]);
   // const [user_id, setUser_Id] = useState();
   AsyncStorage.getItem("user");
   // AsyncStorage.getItem("user").then((value) => setUser_Id(value));
   const [refreshing, setRefreshing] = useState(false);
-  useEffect(() => {
-    fetchRecipe();
-  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchRecipe();
+      // console.log("naload");
+      return () => {
+        fetchRecipe();
+        // console.log("umalis");
+      };
+    }, [])
+  );
 
   const fetchRecipe = async () => {
     user_id = await AsyncStorage.getItem("user");
@@ -131,7 +139,7 @@ const ManageRecipe = () => {
             <Text style={styles.recipeTxt}>Manage Your Recipe</Text>
           </View>
           
-          <YourRecipefilter data={recipelist} input={item} setInput={setRecipe}/>
+          <YourRecipefilter data={recipelist} input={item} navigation={navigation} setInput={setRecipe}/>
         </View>
         
    

@@ -9,6 +9,8 @@ import {ROUTES} from '../constants/routes';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ProfileNavigator from './ProfileNavigator';
 import RecipeNavigator from './RecipeNavigator';
+import BookMarkedRecipeDetails from '../screens/home/bookmarkedRecipeDetails';
+import BookmarkedRecipeNavigator from './BookedMarkedRecipe';
 
 
 const Tab = createBottomTabNavigator();
@@ -92,7 +94,7 @@ const BottomTabNavigator = () => {
               // </TouchableOpacity>
             ) 
           }}/>
-      <Tab.Screen name={ROUTES.BOOKMARK} component={Bookmark} options={{
+      <Tab.Screen name={ROUTES.BOOKMARKED_RECIPE_NAVIGATOR} component={BookmarkedRecipeNavigator} options={{
             tabBarIcon: ({focused}) => (
               <View
                 style={{

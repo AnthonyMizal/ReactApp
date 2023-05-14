@@ -9,6 +9,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Profile from '../screens/home/profile';
 import EditProfile from '../screens/home/editprofile';
 import ManageRecipe from '../screens/home/managerecipe';
+import Editrecipe from '../screens/home/editrecipe';
 
 const Stack = createStackNavigator();
 
@@ -28,6 +29,7 @@ const AuthNavigator = () => {
         <Stack.Screen name={ROUTES.EDIT_PROFILE} component={EditProfile}/>
         {/* <Stack.Screen name={ROUTES.LOGIN} component={Login}/> */}
         <Stack.Screen name={ROUTES.MANAGE_RECIPE} component={ManageRecipe}/>
+        <Stack.Screen name={ROUTES.EDITOWNRECIPE} component={Editrecipe}/>
     </Stack.Navigator>
   );
 }

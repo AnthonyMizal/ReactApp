@@ -3,7 +3,7 @@ import {View, TouchableOpacity, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
+import { baseUrl } from '../constants/url';
 const DeleteButton = (data) => {
   const [state, setState] = useState(false);
   AsyncStorage.getItem("user");

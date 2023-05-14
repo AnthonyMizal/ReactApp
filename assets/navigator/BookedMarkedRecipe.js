@@ -1,24 +1,24 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import EditProfile from '../screens/home/editprofile';
-import Profile from '../screens/home/profile';
 import {ROUTES} from '../constants/routes'
 import { createStackNavigator } from '@react-navigation/stack';
-import ManageRecipeNavigator from './ManageRecipeNavigator';
+import Editrecipe from '../screens/home/editrecipe';
+
+import BookMarkedRecipeDetails from '../screens/home/bookmarkedRecipeDetails';
+import BookmarkFilter from '../components/bookmarkedRecipe';
+import Bookmark from '../screens/home/bookmark';
 
 const Stack = createStackNavigator();
 
-const ProfileNavigator = () => {
+const BookmarkedRecipeNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{
         headerShown: false
       }}
-    initialRouteName={ROUTES.PROFILE}  >
-        <Stack.Screen name={ROUTES.PROFILE} component={Profile}/>
-        <Stack.Screen name={ROUTES.EDIT_PROFILE} component={EditProfile}/>
-        <Stack.Screen name={ROUTES.MANAGE_RECIPE_NAVIGATOR} component={ManageRecipeNavigator}/>
+    initialRouteName={ROUTES.BOOKMARK}  >
+        <Stack.Screen name={ROUTES.BOOKMARK} component={Bookmark}/>
         {/* <Stack.Screen name={ROUTES.LOGIN} component={Login}/> */}
-        
+        <Stack.Screen name={ROUTES.BOOKMARKED_RECIPE_DETAILS} component={BookMarkedRecipeDetails}/>
         {/* <Stack.Screen name={ROUTES.AUTH_NAVIGATOR} component={AuthNavigator}/> */}
     </Stack.Navigator>
   );
@@ -28,4 +28,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default ProfileNavigator;
+export default BookmarkedRecipeNavigator;

@@ -6,9 +6,9 @@ import {ROUTES} from '../constants/routes';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import BookmarkButton from './bookmarkBtn';
 import axios from 'axios';
-const baseUrl = 'http://192.168.18.43/PcookApp/';
+import { imgUrl } from '../constants/url';
 
-const BookmarkFilter = ({data}) => {
+const BookmarkFilter = ({data, navigation}) => {
 
 
     let [fontsLoaded] = useFonts({
@@ -24,23 +24,22 @@ const BookmarkFilter = ({data}) => {
 
     return (
         <FlatList scrollEnabled={false} data={data} keyExtractor={item => item.id.toString()} renderItem={({item}) => {
-
-               return ( 
-                <TouchableOpacity style={styles.recipeCont} key={item.id}>
-                    <View style={styles.rightCont}>
-                        <Image style={styles.recipeImg} source={{uri: baseUrl + item.img_location}} />
-                    </View>
-          
-                    <View style={styles.middleCont}>
-                        <Text style={styles.recipeTitle}>{item.name}</Text>
-                        <Text style={styles.recipeCreator}>by {item.fullname}</Text>
-                        <Text style={styles.recipeTD}>{item.cooking_time} | {item.difficulty}</Text>
-                    </View>
-                    <View style={styles.leftCont}>
-                        <BookmarkButton data={item.id}/>
-                    </View>
-                </TouchableOpacity> )
-            
+                return ( 
+                 <TouchableOpacity style={styles.recipeCont} key={item.id} onPress={() => {navigation.navigate(ROUTES.BOOKMARKED_RECIPE_DETAILS, item)}}>
+                     <View style={styles.rightCont}>
+                         <Image style={styles.recipeImg} source={{uri: imgUrl + item.img_location}} />
+                     </View>
+           
+                     <View style={styles.middleCont}>
+                         <Text style={styles.recipeTitle}>{item.name}</Text>
+                         <Text style={styles.recipeCreator}>by {item.fullname}</Text>
+                         <Text style={styles.recipeTD}>{item.cooking_time} MIN | {item.difficulty}</Text>
+                     </View>
+                     <View style={styles.leftCont}>
+                         <BookmarkButton data={item.id}/>
+                     </View>
+                 </TouchableOpacity> 
+                 )
         }}/>
         
     );

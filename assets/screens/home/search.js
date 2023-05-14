@@ -5,8 +5,8 @@ import {useFonts} from 'expo-font';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Searchfilter from '../../components/searchfilter';
 import axios from 'axios';
-const baseUrl = 'http://192.168.18.43/PcookApp/restAPI/';
-
+import { baseUrl } from '../../constants/url';
+import { useFocusEffect } from "@react-navigation/native";
 
 
 const Search = ({navigation}) => {
@@ -15,9 +15,16 @@ const Search = ({navigation}) => {
   const [recipelist, setRecipelist] = useState([]);
   const [item, setRecipe] = useState('');
 
-  useEffect(() => {
-    fetchUserData();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchUserData();
+      // console.log("naload");
+      return () => {
+        fetchUserData();
+        // console.log("umalis");
+      };
+    }, [])
+  );
 
   let [fontsLoaded] = useFonts({
     'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
