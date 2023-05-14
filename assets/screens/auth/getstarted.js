@@ -33,7 +33,7 @@ const Getstarted = (props) => {
       
       <Image style={styles.foodpng} source={require('../../person.png')} />
       
-      <SvgXml style={styles.wavepng} xml={xml} width="100%" height="100%"/>
+
       <View style={styles.textWrapper}>
         <Text style={styles.text1}>CONTAINS MANY PREMIUIM RECIPES</Text>
       </View>
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     marginTop: 100,
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   foodpng: {
     position: 'absolute',
@@ -110,10 +110,11 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
     padding: 18,
     paddingHorizontal: 100,
-    borderRadius: 30
+    borderRadius: 30,
+    elevation: 2
   },
   getStartedTxt: {
-    color: COLORS.gray,
+    color: '#737373',
     fontFamily: 'CL-Bold'
   }
 

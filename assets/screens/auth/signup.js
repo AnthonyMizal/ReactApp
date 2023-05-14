@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   getStartedTxt: {
-    color: COLORS.gray,
+    color: '#737373',
     fontFamily: 'CL-Bold',
     fontSize: 16
   },

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, TouchableOpacity, Alert} from 'react-native';
+import {View, TouchableOpacity, Alert, ToastAndroid} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -20,8 +20,8 @@ const DeleteButton = (data) => {
 
   const showConfirmDialog = () => {
     return Alert.alert(
-      "Are your sure?",
-      "Are you sure you want to remove this beautiful box?",
+      "Delete Recipe",
+      "Are you sure you want to delete this recipe?",
       [
         // The "Yes" button
         {
@@ -48,7 +48,7 @@ const DeleteButton = (data) => {
       );
       if (response.status === 200) {
         console.log(response.status)
-        alert(` Succesfully Removed!`);
+        ToastAndroid.show('Succesfully Deleted!', ToastAndroid.SHORT);
       } else {
         throw new Error("An error has occurred");
       }

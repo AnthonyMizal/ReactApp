@@ -42,7 +42,7 @@ const category_picker = ["BREAKFAST", "LUNCH", "DINNER", "DESSERT"];
 
 
 const Addrecipe = ({navigation}) => {
-  const [user_id, setUser_Id] = useState();
+  // const [user_id, setUser_Id] = useState();
   const [image, setImagePath] = useState(null);
   const [name, setName] = useState();
   const [video_link, setVidLink] = useState();
@@ -52,7 +52,7 @@ const Addrecipe = ({navigation}) => {
   const [ingredients, setIngredients] = useState();
   const [directions, setDirections] = useState();
   const data = new FormData();
-  AsyncStorage.getItem("user").then((value) => setUser_Id(value));
+  AsyncStorage.getItem("user");
   let [fontsLoaded] = useFonts({
     'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
     'Momcake-Thin': require('../../fonts/Momcake-Thin.otf'),
@@ -64,24 +64,6 @@ const Addrecipe = ({navigation}) => {
     return null;
   }
   
-  _pickDocument = async () => {
-    let result = await DocumentPicker.getDocumentAsync({});
-
-    setImagePath(result.uri);
-    // console.log(result);
-
-    data.append("file", {
-      name: result.name,
-      type: result.mimeType,
-      uri: result.uri,
-    });
-
-    axios.post(`${baseUrl}addImagefile`, data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-  };
 
 
   const onChangeNameHandler = (name) => {
@@ -104,11 +86,30 @@ const Addrecipe = ({navigation}) => {
     setDirections(directions);
   };
 
-  const addRecipe = async () => {
+  _pickDocument = async () => {
+    let result = await DocumentPicker.getDocumentAsync({});
 
+    setImagePath(result.uri);
+    // console.log(result);
+
+    data.append("file", {
+      name: result.name,
+      type: result.mimeType,
+      uri: result.uri,
+    });
+
+    axios.post(`${baseUrl}addImagefile`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  };
+
+
+  const addNewRecipe = async () => {
+    user_id = await AsyncStorage.getItem("user");
     if (image) {
       try {
-        console.log(name, user_id, video_link, cooking_time, difficulty, category, ingredients, directions)
         const response = await axios.post(`${baseUrl}addRecipeWithPic`, {
         user_id:user_id,
         name:name,
@@ -120,11 +121,18 @@ const Addrecipe = ({navigation}) => {
         directions:directions,
         });
         if (response.status === 200) {
+
           if (image) {
             ToastAndroid.show('Succesfully added a recipe!', ToastAndroid.SHORT);
           } else {
             ToastAndroid.show('Succesfully added a recipe!', ToastAndroid.SHORT);
           }
+          setImagePath(null);
+          setName('');
+          setVidLink('');
+          setTime('');
+          setIngredients('');
+          setDirections('');
           return navigation.navigate(ROUTES.RECIPE_HOME);
         } else {
 
@@ -169,7 +177,7 @@ const Addrecipe = ({navigation}) => {
     <View style={styles.container}>
      
       <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.navigate(ROUTES.MANAGE_RECIPE)}>
+          <TouchableOpacity onPress={() => navigation.navigate(ROUTES.RECIPE_HOME_NAVIGATOR)}>
             <Icon
                 name= 'arrow-left'
                 size={28}
@@ -181,7 +189,7 @@ const Addrecipe = ({navigation}) => {
           <View style={styles.iconCont}>
             <Image style={styles.icon} source={require('../../addrecipe.png')} />
           </View>
-          <TouchableOpacity onPress={() => addRecipe()}>
+          <TouchableOpacity onPress={() => addNewRecipe()}>
             <Text style={styles.doneText}>SAVE</Text>
           </TouchableOpacity>
       </View>
@@ -302,7 +310,8 @@ const imageUploaderStyles=StyleSheet.create({
       backgroundColor:'#efefef',
       position:'relative',
       overflow:'hidden',
-      alignSelf: 'center'
+      alignSelf: 'center',
+      borderRadius: 50
   },
   uploadBtnContainer:{
       opacity:0.7,

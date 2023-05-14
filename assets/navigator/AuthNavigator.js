@@ -14,6 +14,8 @@ import Editrecipe from '../screens/home/editrecipe';
 const Stack = createStackNavigator();
 
 const AuthNavigator = () => {
+
+
   return (
     <Stack.Navigator
     screenOptions={{

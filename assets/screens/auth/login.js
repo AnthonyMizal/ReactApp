@@ -192,10 +192,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 100,
     borderRadius: 30,
     width: '80%',
-    alignItems: 'center'
+    alignItems: 'center',
+    elevation: 2
   },
   getStartedTxt: {
-    color: COLORS.gray,
+    color: '#737373',
     fontFamily: 'CL-Bold',
     fontSize: 16
   },
