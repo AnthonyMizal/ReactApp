@@ -54,7 +54,7 @@ const Searchfilter = ({data, input, setInput, navigation}) => {
                          <Text style={styles.recipeTD}>{item.cooking_time} | {item.difficulty}</Text>
                      </View>
                      <View style={styles.leftCont}>
-                         <BookmarkButton data={item}/>
+                         <BookmarkButton data={item.id}/>
                      </View>
                  </TouchableOpacity> )
              }
