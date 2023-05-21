@@ -18,10 +18,8 @@ const Search = ({navigation}) => {
   useFocusEffect(
     React.useCallback(() => {
       fetchUserData();
-      // console.log("naload");
       return () => {
         fetchUserData();
-        // console.log("umalis");
       };
     }, [])
   );
@@ -43,30 +41,10 @@ const Search = ({navigation}) => {
     }).then((response) =>
     {
       setRecipelist(response.data.payload);
-      console.log(response.data.payload)
     }).catch(error => {
       console.error(error);
     });
 }
-
-  // const fetchSearchRecipe = async () => {
-  //   try {
-  //     const response = await axios.get(`${baseUrl}getRecipeDetails`, {
-        
-  //     });
-  //     if (response.status === 200 || refreshing === true) {
-  //       // alert(response.data.payload[0].cooking_time);
-  //       // console.log(response.data.payload[0]);
-  //       setRecipelist(response.data.payload);
-  //       console.log(response.data.payload)
-
-  //     } else {
-  //       throw new Error("An error has occurred");
-  //     }
-  //   } catch (error) {
-
-  //   }
-  // };
 
 
     return (
@@ -86,7 +64,9 @@ const Search = ({navigation}) => {
               color={COLORS.gray}/>
           <TextInput style={styles.input} placeholder='Find Recipe' autoFocus={true} value={item} onChangeText={text => setRecipe(text) }/>
         </View>
+        <View style={styles.recipeWrapper}>
           <Searchfilter data={recipelist} input={item} setInput={setRecipe} navigation={navigation} key={recipelist.id}/>
+        </View>
         </View>
       
       </ScrollView>
@@ -148,7 +128,7 @@ const styles = StyleSheet.create({
   }
   ,
   recipeWrapper: {
-    paddingHorizontal: 25
+    marginBottom: 80
   },
   recipeTxtCont: {
     borderBottomWidth: 2,

@@ -24,9 +24,11 @@ const BottomTabNavigator = () => {
         tabBarStyle: {
           display: 'flex',
           backgroundColor: '#fff',
-          height: 60,
+          height: 80,
           borderTopWidth: 0,
-          elevation: 50
+          position: 'absolute',
+          bottom:15,
+          borderRadius: 50
         },
         tabBarShowLabel: false,
         headerShown: false,

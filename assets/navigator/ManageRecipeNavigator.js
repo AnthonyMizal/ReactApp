@@ -13,8 +13,8 @@ const ManageRecipeNavigator = () => {
         headerShown: false
       }}
     initialRouteName={ROUTES.MANAGE_RECIPE}  >
-        <Stack.Screen name={ROUTES.MANAGE_RECIPE} component={ManageRecipe}/>
-        <Stack.Screen name={ROUTES.EDITOWNRECIPE} component={Editrecipe}/>
+        <Stack.Screen name={ROUTES.MANAGE_RECIPE} component={ManageRecipe} />
+        <Stack.Screen name={ROUTES.EDITOWNRECIPE} component={Editrecipe} />
     </Stack.Navigator>
   );
 }

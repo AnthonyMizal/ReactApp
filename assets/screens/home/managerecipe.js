@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, TextInput, RefreshControl } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, ToastAndroid, TextInput, RefreshControl } from 'react-native';
 import {COLORS} from '../../constants/colors';
 import {useFonts} from 'expo-font';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -12,18 +12,14 @@ import { useFocusEffect } from "@react-navigation/native";
 
 const ManageRecipe = ({navigation}) => {
   const [recipelist, setRecipelist] = useState([]);
-  // const [user_id, setUser_Id] = useState();
   AsyncStorage.getItem("user");
-  // AsyncStorage.getItem("user").then((value) => setUser_Id(value));
   const [refreshing, setRefreshing] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
       fetchRecipe();
-      // console.log("naload");
       return () => {
         fetchRecipe();
-        // console.log("umalis");
       };
     }, [])
   );
@@ -34,16 +30,13 @@ const ManageRecipe = ({navigation}) => {
       const response = await axios.get(`${baseUrl}getRecipeDetails/${user_id}`, {
       });
       if (response.status === 200) {
-        // alert(response.data.payload[0].cooking_time);
-        // console.log(response.data.payload[0]);
         setRecipelist(response.data.payload);
-        console.log(response.data.payload)
 
       } else {
         throw new Error("An error has occurred");
       }
     } catch (error) {
-
+      ToastAndroid.show('No recipes created!', ToastAndroid.SHORT);
     }
   };
 
@@ -54,45 +47,6 @@ const ManageRecipe = ({navigation}) => {
       setRefreshing(false);
     }, 2000);
   }, []);
-
-
-
-
-
-  // const recipelist = [
-  //   {
-  //     id: '1',
-  //     recipeImg: require('../../sisig.jpg'),
-  //     recipeTitle: 'pork sisig',
-  //     recipeCreator: 'Jazmine Althea Isip',
-  //     recipeTD: '30 min | medium',
-  //     category: 'LUNCH'
-  //   },
-  //   {
-  //     id: '2',
-  //     recipeImg: require('../../crispypata.jpg'),
-  //     recipeTitle: 'Crispy Pata',
-  //     recipeCreator: 'Kim Padua',
-  //     recipeTD: '30 min | easy',
-  //     category: 'DINNER'
-  //   },
-  //   {
-  //     id: '3',
-  //     recipeImg: require('../../kaldereta.jpg'),
-  //     recipeTitle: 'kaldereta',
-  //     recipeCreator: 'Jasper Mamaril',
-  //     recipeTD: '30 min | hard',
-  //     category: 'DINNER'
-  //   },
-  //   {
-  //     id: '4',
-  //     recipeImg: require('../../adobo.jpg'),
-  //     recipeTitle: 'Adobo',
-  //     recipeCreator: 'Nathaniel Ribada',
-  //     recipeTD: '30 min | medium',
-  //     category: 'BREAKFAST'
-  //   }
-  // ];
 
   const [item, setRecipe] = useState('');
   const [itemCategory, setCategory] = useState('');
@@ -110,7 +64,6 @@ const ManageRecipe = ({navigation}) => {
   if (!fontsLoaded) {
     return null;
   }
-  console.log(itemCategory)
 
 
 

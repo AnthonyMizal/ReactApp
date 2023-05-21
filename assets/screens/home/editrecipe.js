@@ -1,5 +1,4 @@
-import React, {useState} from 'react';
-import { StatusBar } from 'expo-status-bar';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, Image,ToastAndroid, TouchableOpacity, TextInput, KeyboardAvoidingView,Platform, Button} from 'react-native';
 import {COLORS} from '../../constants/colors';
 import {useFonts} from 'expo-font';
@@ -9,14 +8,12 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SelectDropdown from 'react-native-select-dropdown';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
-import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import * as DocumentPicker from 'expo-document-picker';
-// import Recipe from '../../components/recipe';
-import UploadImage from '../../components/uploadImage';
-// import ImagePicker from 'react-native-image-crop-picker';
+import { useFocusEffect } from "@react-navigation/native";
 import { baseUrl } from '../../constants/url';
+import { imgUrl } from '../../constants/url';
 
 
 
@@ -55,35 +52,6 @@ const Editrecipe = ({navigation, route}) => {
   const [directions, setDirections] = useState();
   const data = new FormData();
   AsyncStorage.getItem("user").then((value) => setUser_Id(value));
-  let [fontsLoaded] = useFonts({
-    'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
-    'Momcake-Thin': require('../../fonts/Momcake-Thin.otf'),
-    'CL-Reg': require('../../fonts/CL-Reg.ttf'),
-    'CL-Bold': require('../../fonts/CL-Bold.ttf'),
-    'Antically': require('../../fonts/Antically.ttf'),
-  });
-  if (!fontsLoaded) {
-    return null;
-  }
-  
-  _pickDocument = async () => {
-    let result = await DocumentPicker.getDocumentAsync({});
-
-    setImagePath(result.uri);
-    // console.log(result);
-
-    data.append("file", {
-      name: result.name,
-      type: result.mimeType,
-      uri: result.uri,
-    });
-
-    axios.post(`${baseUrl}addImagefile`, data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-  };
 
 
   const onChangeNameHandler = (name) => {
@@ -106,69 +74,97 @@ const Editrecipe = ({navigation, route}) => {
     setDirections(directions);
   };
 
-  const addRecipe = async () => {
+  useFocusEffect(
+    React.useCallback(() => {
+      getRecipe();
+      return () => {
+        getRecipe();
+      };
+    }, [])
+  );
 
-    if (image) {
-      try {
-        console.log(name, user_id, video_link, cooking_time, difficulty, category, ingredients, directions)
-        const response = await axios.post(`${baseUrl}addRecipeWithPic`, {
-        user_id:user_id,
+  const getRecipe= async () => {
+    try {
+      
+      const response = await axios.get(`${baseUrl}getRecipeEditDetails/${recipeDetails.id}`, {
+        
+      });
+      if (response.status === 200 || refreshing === true) {
+        setName(response.data.payload[0].name);
+        setVidLink(response.data.payload[0].video_link);
+        setTime(JSON.stringify(response.data.payload[0].cooking_time));
+        setIngredients(response.data.payload[0].ingredients);
+        setDirections(response.data.payload[0].directions);
+        setImagePath(imgUrl + response.data.payload[0].img_location);
+        setDifficulty(response.data.payload[0].difficulty);
+        setCategory(response.data.payload[0].category);
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+
+    }
+  };
+
+
+  _pickDocument = async () => {
+    let result = await DocumentPicker.getDocumentAsync({});
+
+    setImagePath(result.uri);
+
+    data.append("file", {
+      name: result.name,
+      type: result.mimeType,
+      uri: result.uri,
+    });
+
+    axios
+      .post(`${baseUrl}editRecipePic/${recipeDetails.id}`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => console.log(response.data));
+  };
+
+  const editRecipe = async () => {
+    try {
+      const response = await axios.post(`${baseUrl}editRecipe/`, {
+        id: recipeDetails.id,
         name:name,
         video_link:video_link,
         cooking_time:cooking_time,
         difficulty:difficulty, 
         category:category,
         ingredients:ingredients,
-        directions:directions,
-        });
-        if (response.status === 200) {
-          if (image) {
-            ToastAndroid.show('Succesfully added a recipe!', ToastAndroid.SHORT);
-          } else {
-            ToastAndroid.show('Succesfully added a recipe!', ToastAndroid.SHORT);
-          }
-          return navigation.navigate(ROUTES.RECIPE_HOME);
-        } else {
-
-          throw new Error("An error has occurred");
-        }
-      } catch (error) {
-        alert("Invalid");
+        directions:directions
+      });
+      if (response.status === 200) {
+        ToastAndroid.show('Successfully saved!', ToastAndroid.SHORT);
+        return navigation.navigate(ROUTES.MANAGE_RECIPE);
+      } else {
+        // setState(false);
+        ToastAndroid.show('Error!', ToastAndroid.SHORT);
+        throw new Error("An error has occurred");
       }
-    } else {
-      try {
-        const response = await axios.post(`${baseUrl}createrecipe`, {
-          // img_location,
-          user_id,
-          name,
-          video_link,
-          cooking_time,
-          difficulty, 
-          category,
-          ingredients,
-          directions
-        }
-        
-        );
-        if (response.status === 200) {
-          if (image) {
-            ToastAndroid.show('Succesfully added a recipe!', ToastAndroid.SHORT);
-          } else {
-            ToastAndroid.show('Succesfully added a recipe!', ToastAndroid.SHORT);
-          }
-          return navigation.navigate(ROUTES.RECIPE_HOME);
-        } else {
-          throw new Error("An error has occurred");
-        }
-      } catch (error) {
-        alert("Invalid!");
-      }
+    } catch (error) {
     }
   };
 
+  let [fontsLoaded] = useFonts({
+    'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
+    'Momcake-Thin': require('../../fonts/Momcake-Thin.otf'),
+    'CL-Reg': require('../../fonts/CL-Reg.ttf'),
+    'CL-Bold': require('../../fonts/CL-Bold.ttf'),
+    'Antically': require('../../fonts/Antically.ttf'),
+  });
+  if (!fontsLoaded) {
+    return null;
+  }
 
     return (
     <View style={styles.container}>
+     
      
       <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.navigate(ROUTES.MANAGE_RECIPE)}>
@@ -183,7 +179,7 @@ const Editrecipe = ({navigation, route}) => {
           <View style={styles.iconCont}>
             <Image style={styles.icon} source={require('../../addrecipe.png')} />
           </View>
-          <TouchableOpacity onPress={() => addRecipe()}>
+          <TouchableOpacity onPress={() => editRecipe()}>
             <Text style={styles.doneText}>SAVE</Text>
           </TouchableOpacity>
       </View>
@@ -221,22 +217,19 @@ const Editrecipe = ({navigation, route}) => {
           <TextInput  style={styles.input} placeholder='Type here the cooking time...' value={cooking_time} onChangeText={onChangeCookingtimeHandler}/>
         </View>
         <View>
+        
           <Text style={styles.textInput}>Difficulty:</Text>
           <SelectDropdown
             
               data={difficulty_picker}
+              defaultValue={difficulty}
               onSelect={(selectedItem, index) => {
-                console.log(selectedItem, index)
                 setDifficulty(selectedItem);
               }}
               buttonTextAfterSelection={(selectedItem, index) => {
-                // text represented after item is selected
-                // if data array is an array of objects then return selectedItem.property to render after item is selected
                 return selectedItem
               }}
               rowTextForSelection={(item, index) => {
-                // text represented for each item in dropdown
-                // if data array is an array of objects then return item.property to represent item in dropdown
                 return item
               }}
               renderDropdownIcon={isOpened => {
@@ -251,8 +244,8 @@ const Editrecipe = ({navigation, route}) => {
           <SelectDropdown
             
               data={category_picker}
+              defaultValue={category}
               onSelect={(selectedItem, index) => {
-                console.log(selectedItem, index)
                 setCategory(selectedItem);
               }}
               buttonTextAfterSelection={(selectedItem, index) => {

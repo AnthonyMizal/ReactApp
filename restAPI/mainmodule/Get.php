@@ -106,6 +106,35 @@ class Get{
         }
     }
 
+    public function editRecipePic($condition_string = null)
+    {
+        try {
+            if ($_FILES['file']['name'] != '') {
+                $test = explode('.', $_FILES['file']['name']);
+                $extension = end($test);
+                $allowedExts = array("jpeg", "jpg", "png");
+                if ((($_FILES["file"]["type"] == "image/jpeg")
+                    || ($_FILES["file"]["type"] == "image/jpg")
+                    || ($_FILES["file"]["type"] == "image/pjpeg")
+                    || ($_FILES["file"]["type"] == "image/x-png")
+                    || ($_FILES["file"]["type"] == "image/png")))
+                    $name = date("Y-m-d") . rand(100, 999999999999) . '.' . $extension;
+                // $location = '../uploads/'.$name;
+                $location = '../assets/recipeimages/' . $name;
+                $location2 = '/assets/recipeimages/' . $name;
+                move_uploaded_file($_FILES['file']['tmp_name'], $location);
+                $sql_str = "UPDATE recipes set img_location='$location2' ";
+                $sql_str .= $condition_string;
+                $sql = $this->pdo->prepare($sql_str);
+                $sql->execute();
+                return $this->gm->returnPayload($sql_str, "success", "image saved", 200);
+            }
+        }
+        catch (Exception $e) {
+            $errmsg = $e->getMessage();
+            $code = 403;
+        }
+    }
 
     // public function file($table, $data, $condition){
 
@@ -200,7 +229,7 @@ class Get{
 
         public function get_favorites_recipe($table, $condition = null){
             // 2-Confirm 1-Tentative 0-Cancel	
-            $sql = "SELECT recipes.*, users.fullname FROM bookmark JOIN recipes ON bookmark.recipe_id = recipes.id JOIN users ON bookmark.user_id = users.id";
+            $sql = "SELECT recipes.*, users.fullname FROM recipes JOIN bookmark ON bookmark.recipe_id = recipes.id JOIN users ON recipes.user_id = users.id";
 
             if ($condition != null) {
                 $sql .= " WHERE {$condition}";

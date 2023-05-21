@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, TextInput, RefreshControl } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, ToastAndroid, TextInput, RefreshControl } from 'react-native';
 import {COLORS} from '../../constants/colors';
 import {useFonts} from 'expo-font';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -20,26 +20,11 @@ const Home = ({navigation}) => {
   useFocusEffect(
     React.useCallback(() => {
       fetchRecipe();
-      // console.log("naload");
       return () => {
         fetchRecipe();
-        // console.log("umalis");
       };
     }, [])
   );
-
-
-//   async function fetchUserData() {
-
-//     axios.get(`${baseUrl}fetchuser/${name}`, {
-//     }).then((response) =>
-//     {
-//       console.log(response.data);
-//     }).catch(error => {
-//       console.error(error);
-//     });
-// }
-
 
 
   const fetchRecipe = async () => {
@@ -49,13 +34,12 @@ const Home = ({navigation}) => {
       });
       if (response.status === 200 || refreshing === true) {
         setRecipelist(response.data.payload);
-        console.log(response.data.payload)
 
       } else {
         throw new Error("An error has occurred");
       }
     } catch (error) {
-
+      ToastAndroid.show('No Recipe Available!', ToastAndroid.SHORT);
     }
   };
 
@@ -67,13 +51,12 @@ const Home = ({navigation}) => {
       });
       if (response.status === 200 || refreshing === true) {
         setRecipelist(response.data.payload);
-        console.log(response.data.payload)
 
       } else {
         throw new Error("An error has occurred");
       }
     } catch (error) {
-
+      ToastAndroid.show('No lunch recipes available!', ToastAndroid.SHORT);
     }
   };
 
@@ -85,13 +68,12 @@ const Home = ({navigation}) => {
       });
       if (response.status === 200 || refreshing === true) {
         setRecipelist(response.data.payload);
-        console.log(response.data.payload)
 
       } else {
-        throw new Error("An error has occurred");
+        
       }
     } catch (error) {
-
+      ToastAndroid.show('No breakfast recipes available!', ToastAndroid.SHORT);
     }
   };
 
@@ -103,13 +85,12 @@ const Home = ({navigation}) => {
       });
       if (response.status === 200 || refreshing === true) {
         setRecipelist(response.data.payload);
-        console.log(response.data.payload)
 
       } else {
         throw new Error("An error has occurred");
       }
     } catch (error) {
-
+      ToastAndroid.show('No dinner recipes available!', ToastAndroid.SHORT);
     }
   };
 
@@ -122,13 +103,12 @@ const Home = ({navigation}) => {
       });
       if (response.status === 200 || refreshing === true) {
         setRecipelist(response.data.payload);
-        console.log(response.data.payload)
 
       } else {
         throw new Error("An error has occurred");
       }
     } catch (error) {
-
+      ToastAndroid.show('No dessert recipes available!', ToastAndroid.SHORT);
     }
   };
 
@@ -137,7 +117,6 @@ const Home = ({navigation}) => {
   const onRefresh = useCallback(() => {
     fetchRecipe();
     setRefreshing(true);
-    console.log(selectedCategory)
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
@@ -278,7 +257,8 @@ const styles = StyleSheet.create({
   }
   ,
   recipeWrapper: {
-    paddingHorizontal: 25
+    paddingHorizontal: 25,
+    marginBottom: 120
   },
   recipeTxtCont: {
     borderBottomWidth: 2,

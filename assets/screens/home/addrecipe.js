@@ -23,23 +23,6 @@ import { baseUrl } from '../../constants/url';
 const difficulty_picker = ["EASY", "MEDIUM", "HARD"];
 const category_picker = ["BREAKFAST", "LUNCH", "DINNER", "DESSERT"];
 
-// const createFormData = (photo, body = {}) => {
-//   const data = new FormData();
-
-//   data.append('photo', {
-//     name: photo.fileName,
-//     type: photo.type,
-//     uri: Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri,
-//   });
-
-//   Object.keys(body).forEach((key) => {
-//     data.append(key, body[key]);
-//   });
-
-//   return data;
-// };
-
-
 
 const Addrecipe = ({navigation}) => {
   // const [user_id, setUser_Id] = useState();
@@ -53,17 +36,7 @@ const Addrecipe = ({navigation}) => {
   const [directions, setDirections] = useState();
   const data = new FormData();
   AsyncStorage.getItem("user");
-  let [fontsLoaded] = useFonts({
-    'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
-    'Momcake-Thin': require('../../fonts/Momcake-Thin.otf'),
-    'CL-Reg': require('../../fonts/CL-Reg.ttf'),
-    'CL-Bold': require('../../fonts/CL-Bold.ttf'),
-    'Antically': require('../../fonts/Antically.ttf'),
-  });
-  if (!fontsLoaded) {
-    return null;
-  }
-  
+
 
 
   const onChangeNameHandler = (name) => {
@@ -172,7 +145,17 @@ const Addrecipe = ({navigation}) => {
     }
   };
 
-
+  let [fontsLoaded] = useFonts({
+    'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
+    'Momcake-Thin': require('../../fonts/Momcake-Thin.otf'),
+    'CL-Reg': require('../../fonts/CL-Reg.ttf'),
+    'CL-Bold': require('../../fonts/CL-Bold.ttf'),
+    'Antically': require('../../fonts/Antically.ttf'),
+  });
+  if (!fontsLoaded) {
+    return null;
+  }
+  
     return (
     <View style={styles.container}>
      
@@ -232,7 +215,6 @@ const Addrecipe = ({navigation}) => {
             
               data={difficulty_picker}
               onSelect={(selectedItem, index) => {
-                console.log(selectedItem, index)
                 setDifficulty(selectedItem);
               }}
               buttonTextAfterSelection={(selectedItem, index) => {
@@ -258,7 +240,7 @@ const Addrecipe = ({navigation}) => {
             
               data={category_picker}
               onSelect={(selectedItem, index) => {
-                console.log(selectedItem, index)
+
                 setCategory(selectedItem);
               }}
               buttonTextAfterSelection={(selectedItem, index) => {

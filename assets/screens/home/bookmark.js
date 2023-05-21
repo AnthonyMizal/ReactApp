@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import { ScrollView, StyleSheet, Text, View, Image, RefreshControl } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Image, ToastAndroid, RefreshControl } from 'react-native';
 import {COLORS} from '../../constants/colors';
 import {useFonts} from 'expo-font';
 import {ROUTES} from '../../constants/routes';
@@ -20,20 +20,8 @@ const Bookmark = ({navigation}) => {
   useFocusEffect(
     React.useCallback(() => {
       fetchRecipe();
-      // console.log("naload");
       return () => {
         fetchRecipe();
-        // console.log("umalis");
-      };
-    }, [])
-  );
-  useFocusEffect(
-    React.useCallback(() => {
-      fetchRecipe();
-      // console.log("naload");
-      return () => {
-        fetchRecipe();
-        // console.log("umalis");
       };
     }, [])
   );
@@ -46,16 +34,15 @@ const Bookmark = ({navigation}) => {
           
         });
         if (response.status === 200 || refreshing === true) {
-          // alert(response.data.payload[0].cooking_time);
-          // console.log(response.data.payload[0]);
           setRecipelist(response.data.payload);
-          console.log(response.data);
 
         } else {
           throw new Error("An error has occurred");
         }
       } catch (error) {
 
+        setRecipelist('');
+        ToastAndroid.show('No favorite recipes available!', ToastAndroid.SHORT);
       }
     };
 

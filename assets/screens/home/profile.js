@@ -13,15 +13,6 @@ const xml =`
 
 const Profile = ({navigation}) => {
   
-// const removeData = async () => {
-//   try {
-//     const savedUser = await AsyncStorage.clear();
-//     return navigation.navigate(ROUTES.LOGIN)
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-  
   let [fontsLoaded] = useFonts({
     'Momcake-Bold': require('../../fonts/Momcake-Bold.otf'),
     'Momcake-Thin': require('../../fonts/Momcake-Thin.otf'),

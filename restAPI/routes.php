@@ -99,7 +99,9 @@ switch($_SERVER['REQUEST_METHOD']){
                 }
                 break;
 
-
+            case 'editRecipe':
+                echo json_encode($global->update("recipes", $data, NULL));
+                break;
 
             case 'updateProfile':
                 echo json_encode($global->update('users', $data, NULL));
@@ -136,6 +138,11 @@ switch($_SERVER['REQUEST_METHOD']){
                     echo json_encode($global->update('users', $data, NULL));
                 break;
 
+                case 'editRecipePic':
+                    // if (count($req) > 1) {
+                    echo json_encode($get->editRecipePic("WHERE id = '$req[1]'"));
+                    // }
+                    break;
             default:
                 echo "request not found";
             break;
@@ -159,7 +166,16 @@ switch($_SERVER['REQUEST_METHOD']){
                 $data = json_decode(file_get_contents("php://input"));
                 switch($req[0]){
                     // update customer profile request
-                        
+                    
+                    case 'getRecipeEditDetails':
+                        if(count($req)>1){
+                            echo json_encode($get->view_recipe_details('recipes', "recipes.id = '$req[1]'"));
+                        }
+                        else{
+                            echo json_encode($get->view_recipe_details('recipes'));
+                        }   
+                    break;
+
                     case 'getRecipeDetails':
                         if(count($req)>1){
                             echo json_encode($get->get_recipe('recipes', "user_id = '$req[1]'"));

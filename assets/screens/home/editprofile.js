@@ -28,18 +28,16 @@ const EditProfile = ({navigation}) => {
   const onChangeUsername = (username) => {
     setUsername(username);
   };
-  // const [user_id, setUser_Id] = useState();
+
   AsyncStorage.getItem("user");
-  // useEffect(() => {
-  //   fetchOwnAccount();
-  // }, []);
+
   useFocusEffect(
     React.useCallback(() => {
       fetchOwnAccount();
-      // console.log("naload");
+
       return () => {
         fetchOwnAccount();
-        // console.log("umalis");
+
       };
     }, [])
   );
@@ -51,8 +49,6 @@ const EditProfile = ({navigation}) => {
       });
       if (response.status === 200) {
         setAccountInfo(response.data.payload[0]);
-        console.log(accountInfo.fullname)
-
       } else {
         throw new Error("An error has occurred");
       }
@@ -72,7 +68,6 @@ const EditProfile = ({navigation}) => {
       });
       if (response.status === 200) {
         ToastAndroid.show('Succesfully Saved!', ToastAndroid.SHORT);
-        console.log(response.data)
         return navigation.navigate(ROUTES.PROFILE);
       } else {
         // setState(false);
@@ -139,10 +134,7 @@ const EditProfile = ({navigation}) => {
           <Text style={styles.textInput}>Username:</Text>
           <TextInput  style={styles.input} placeholder={accountInfo.username} placeholderTextColor="#000" value={username} onChangeText={onChangeUsername}/>
         </View>
-        <View>
-          <Text style={styles.textInput}>Password:</Text>
-          <TextInput  style={styles.input} placeholder={"Type your new password"} placeholderTextColor="#000"/>
-        </View>
+       
         
 
         </View>

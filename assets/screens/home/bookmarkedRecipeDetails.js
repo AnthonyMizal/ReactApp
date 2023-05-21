@@ -21,31 +21,7 @@ const BookMarkedRecipeDetails = ({navigation, route}) => {
 }
 
  const ytUrl = YouTubeGetID(recipeDetail.video_link);
- console.log(ytUrl);
-  // const [recipedetails, setRecipeDetails] = useState([]);
 
-  // useEffect(() => {
-
-  //   const fetchRecipe = async () => {
-  //     try {
-  //       const response = await axios.post(`${baseUrl}viewRecipeDetails/${recipe_id}`, {
-          
-  //       });
-  //       if (response.status === 200 || refreshing === true) {
-  //         // alert(response.data.payload[0].cooking_time);
-  //         // console.log(response.data.payload[0]);
-  //         setRecipeDetails(response.data);
-          
-
-  //       } else {
-  //         throw new Error("An error has occurred");
-  //       }
-  //     } catch (error) {
-
-  //     }
-  //   };
-  //   fetchRecipe();
-  // }, []);
   const [playing, setPlaying] = useState(false);
 
   const onStateChange = useCallback((state) => {

@@ -4,23 +4,27 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { baseUrl } from '../constants/url';
+import { useFocusEffect } from "@react-navigation/native";
 const BookmarkButton = (data) => {
   const [state, setState] = useState(false);
-  // const [user_id, setUserID] = useState();
   AsyncStorage.getItem("user");
-  // user_id = "";
   const recipe_id = data.data;
 
 
   
-  useEffect(() => {
-    checkBookmark();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      checkBookmark();
+      setState(false);
+      return () => {
+        checkBookmark();
+        setState(false);
+      };
+    }, [])
+  );
 
   const checkBookmark = async () => {
     user_id = await AsyncStorage.getItem("user");
-    console.log(recipe_id);
-    console.log(user_id);
 
     try {
       const response = await axios.post(
@@ -45,8 +49,6 @@ const BookmarkButton = (data) => {
     
   
     if (!state) {
-      console.log(recipe_id);
-      console.log(user_id);
       onSubmitFormHandler();
     } else {
       unSave();
@@ -80,7 +82,6 @@ const BookmarkButton = (data) => {
       
       );
       if (response.status === 200) {
-        console.log(response.status)
         ToastAndroid.show('Succesfully Removed!', ToastAndroid.SHORT);
       } else {
         throw new Error("An error has occurred");
@@ -95,7 +96,7 @@ const BookmarkButton = (data) => {
       <TouchableOpacity onPress={() => click()}>
       <Icon
               name= {state ? 'bookmark' : 'bookmark-o'}
-              size={28}
+              size={30}
               color={'#31C84F'}
             />
       </TouchableOpacity>
