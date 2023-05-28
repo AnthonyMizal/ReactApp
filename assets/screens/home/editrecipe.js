@@ -118,13 +118,11 @@ const Editrecipe = ({navigation, route}) => {
       uri: result.uri,
     });
 
-    axios
-      .post(`${baseUrl}editRecipePic/${recipeDetails.id}`, data, {
+    await axios.post(`${baseUrl}editRecipePic/${recipeDetails.id}`, data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      })
-      .then((response) => console.log(response.data));
+      }).then((response) => console.log(response.data));
   };
 
   const editRecipe = async () => {

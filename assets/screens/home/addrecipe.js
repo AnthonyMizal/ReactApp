@@ -71,11 +71,11 @@ const Addrecipe = ({navigation}) => {
       uri: result.uri,
     });
 
-    axios.post(`${baseUrl}addImagefile`, data, {
+    await axios.post(`${baseUrl}addImagefile`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
-    });
+    }).then((response) => console.log(response.data));
   };
 
 
